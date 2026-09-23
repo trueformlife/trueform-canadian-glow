@@ -29,6 +29,7 @@ import completeTruthImage from "@/assets/product-images/complete-truth-protein.p
 import creatineImage from "@/assets/product-images/creatine.png.asset.json";
 import liquidMagImage from "@/assets/product-images/liquid-mag.png.asset.json";
 import macaImage from "@/assets/product-images/maca.png.asset.json";
+import magSprayImage from "@/assets/product-images/mag-spray.png.asset.json";
 import magteinImage from "@/assets/product-images/magtein.jpg.asset.json";
 import spirulinaImage from "@/assets/product-images/spirulina.jpg.asset.json";
 import turmericImage from "@/assets/product-images/turmeric.png.asset.json";
@@ -54,6 +55,7 @@ type Goal = { id: string; title: string; productIds: string[]; icon: typeof Moon
 const p = shopLinks.products;
 const products: Record<string, Product> = {
   liquidMag: { name: "Liquid Mag", price: "37.94", why: "Fast, easy magnesium support.", href: p.liquidMag, image: liquidMagImage },
+  magSpray: { name: "Mag Spray", price: "32.99", why: "Magnesium spray for sleep and tired legs.", href: p.magSpray, image: magSprayImage },
   magtein: { name: "Magtein", price: "65.99", why: "Magnesium for focus and calm.", href: p.magtein, badge: "New", image: magteinImage },
   bathFlakes: { name: "Bath Flakes", price: "21.99", why: "A simple soak for tired muscles.", href: p.bathFlakes, image: bathFlakesImage },
   spirulina: { name: "Spirulina", price: "26.39", why: "Clean greens for everyday energy.", href: p.spirulina, image: spirulinaImage },
@@ -70,7 +72,7 @@ const products: Record<string, Product> = {
 
 const bestSellers = ["liquidMag", "collagen", "turmeric", "creatine", "bathFlakes", "vanillaProtein"];
 const goals: [Goal, ...Goal[]] = [
-  { id: "sleep", title: "Sleep & stress", productIds: ["liquidMag", "bathFlakes", "magtein"], icon: Moon },
+  { id: "sleep", title: "Sleep & stress", productIds: ["liquidMag", "magSpray", "bathFlakes", "magtein"], icon: Moon },
   { id: "energy", title: "Energy & focus", productIds: ["spirulina", "brainFuel", "magtein"], icon: Brain },
   { id: "strength", title: "Strength & muscle", productIds: ["creatine", "vanillaProtein", "completeTruth"], icon: Dumbbell },
   { id: "joints", title: "Joints & skin", productIds: ["turmeric", "collagen"], icon: Sparkles },
