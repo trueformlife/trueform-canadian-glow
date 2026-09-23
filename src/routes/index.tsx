@@ -3,7 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   Brain,
+  Dumbbell,
+  HeartPulse,
+  Leaf,
   MapPin,
+  Moon,
   PackageCheck,
   Search,
   ShieldCheck,
@@ -11,6 +15,7 @@ import {
   Star,
   TestTube2,
   Users,
+  Wind,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { shopLinks } from "@/config/shopLinks";
@@ -45,6 +50,7 @@ export const Route = createFileRoute("/")({
 });
 
 type Product = { name: string; price: string; why: string; href: string; badge?: "New" | "Save"; image?: { url: string } };
+type Goal = { id: string; title: string; productIds: string[]; icon: typeof Moon };
 
 const p = shopLinks.products;
 const products: Record<string, Product> = {
@@ -64,6 +70,14 @@ const products: Record<string, Product> = {
 };
 
 const bestSellers = ["liquidMag", "collagen", "turmeric", "creatine", "bathFlakes", "vanillaProtein"];
+const goals: [Goal, ...Goal[]] = [
+  { id: "sleep", title: "Sleep & stress", productIds: ["liquidMag", "bathFlakes", "magtein"], icon: Moon },
+  { id: "energy", title: "Energy & focus", productIds: ["spirulina", "brainFuel", "magtein"], icon: Brain },
+  { id: "strength", title: "Strength & muscle", productIds: ["creatine", "vanillaProtein", "completeTruth"], icon: Dumbbell },
+  { id: "joints", title: "Joints & skin", productIds: ["turmeric", "collagen"], icon: Sparkles },
+  { id: "gut", title: "Gut & detox", productIds: ["chlorella", "charcoal"], icon: Leaf },
+  { id: "hormone", title: "Hormone support", productIds: ["maca", "liquidMag"], icon: HeartPulse },
+];
 const bundles: Product[] = [
   { name: "Ultimate Wellness Bundle", price: "160.00", why: "Everyday essentials, bundled together.", href: p.ultimateBundle, badge: "Save" },
   { name: "Glow From Within Bundle", price: "105.99", why: "Support for skin, joints and daily glow.", href: p.glowBundle, badge: "Save" },
@@ -114,9 +128,11 @@ function SectionTitle({ kicker, children }: { kicker?: string; children: React.R
 
 function Index() {
   const [query, setQuery] = useState("");
+  const [selectedGoalId, setSelectedGoalId] = useState(goals[0].id);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const normalizedQuery = query.trim().toLowerCase();
   const searching = normalizedQuery.length > 0;
+  const selectedGoal = goals.find((goal) => goal.id === selectedGoalId) ?? goals[0];
   const searchResults = Object.entries(products)
     .filter(([, product]) => product.name.toLowerCase().includes(normalizedQuery) || product.why.toLowerCase().includes(normalizedQuery))
     .map(([id]) => id);
@@ -173,8 +189,37 @@ function Index() {
             <p className="mt-4 max-w-lg text-[17px] leading-relaxed text-foreground/85 sm:text-xl">Clean supplements from a Canadian family business. No fillers. No junk. Just what works, shipped anywhere in Canada.</p>
             <div className="mt-6 grid gap-3 sm:flex">
               <Button asChild size="lg" className="w-full sm:w-auto"><a href={shopLinks.shop}>Shop all <ArrowRight /></a></Button>
-              <Button size="lg" variant="outline" className="w-full border-foreground/50 bg-background/70 text-foreground sm:w-auto" onClick={() => searchInputRef.current?.focus()}>Find your fit</Button>
+              <Button size="lg" variant="outline" className="w-full border-foreground/50 bg-background/70 text-foreground sm:w-auto" onClick={() => document.getElementById("find-your-fit")?.scrollIntoView({ behavior: "smooth", block: "start" })}>Find your fit</Button>
             </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="find-your-fit" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mx-auto max-w-7xl">
+          <SectionTitle kicker="Find your fit">Where do you want to start?</SectionTitle>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {goals.map((goal) => {
+              const GoalIcon = goal.icon;
+              const selected = goal.id === selectedGoal.id;
+              return (
+                <Button
+                  key={goal.id}
+                  type="button"
+                  variant="outline"
+                  aria-pressed={selected}
+                  onClick={() => setSelectedGoalId(goal.id)}
+                  className={`h-28 w-full flex-col gap-2 border-2 px-2 text-center text-base font-bold ${selected ? "border-accent bg-card text-card-foreground shadow-accent" : "border-line bg-surface text-foreground"}`}
+                >
+                  <GoalIcon className={selected ? "text-accent" : "text-primary"} />
+                  <span>{goal.title}</span>
+                </Button>
+              );
+            })}
+          </div>
+          <div key={selectedGoal.id} className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
+            {selectedGoal.productIds.map((id) => <ProductCard key={id} product={products[id]} compact />)}
           </div>
         </div>
       </section>
