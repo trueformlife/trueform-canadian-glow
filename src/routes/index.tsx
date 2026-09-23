@@ -240,18 +240,7 @@ function Index() {
         <div className="mx-auto max-w-7xl">
           <SectionTitle kicker="Featured this month">20% off Brain Fuel MCT Oil</SectionTitle>
           <div className="mx-auto max-w-md sm:max-w-sm">
-            <article className="relative flex h-full flex-col overflow-hidden rounded-lg bg-card text-card-foreground shadow-xl">
-              <span className="absolute left-4 top-4 z-10 rounded bg-accent px-3 py-1.5 text-base font-bold text-accent-foreground">20% off</span>
-              <ProductVisual name={products.brainFuel.name} image={products.brainFuel.image} />
-              <div className="flex flex-1 flex-col p-4">
-                <h3 className="text-xl font-bold leading-tight">{products.brainFuel.name}</h3>
-                <p className="mt-1 text-base text-muted-foreground">{products.brainFuel.why}</p>
-                <p className="mt-3 font-display text-lg font-bold text-royal">from ${products.brainFuel.price} CAD</p>
-                <Button asChild className="mt-4 w-full">
-                  <a href={products.brainFuel.href}>Buy <ArrowRight /></a>
-                </Button>
-              </div>
-            </article>
+            <ProductCard product={{ ...products["brainFuel"]!, badge: "Save" }} />
           </div>
         </div>
       </section>
