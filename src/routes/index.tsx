@@ -70,7 +70,7 @@ const products: Record<string, Product> = {
 };
 
 const bestSellers = ["liquidMag", "collagen", "turmeric", "creatine", "bathFlakes", "vanillaProtein"];
-const goals: Goal[] = [
+const goals: [Goal, ...Goal[]] = [
   { id: "sleep", title: "Sleep & stress", productIds: ["liquidMag", "bathFlakes", "magtein"], icon: Moon },
   { id: "energy", title: "Energy & focus", productIds: ["spirulina", "brainFuel", "magtein"], icon: Brain },
   { id: "strength", title: "Strength & muscle", productIds: ["creatine", "vanillaProtein", "completeTruth"], icon: Dumbbell },
