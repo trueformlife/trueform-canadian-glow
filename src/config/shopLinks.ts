@@ -8,6 +8,7 @@ export const shopLinks = {
   contact: storeUrl("/contact/"),
   products: {
     liquidMag: storeUrl("/product/liquid-mag/"),
+    magSpray: storeUrl("/product/mag-spray-x2/"),
     magtein: storeUrl("/product/magtein/"),
     bathFlakes: storeUrl("/product/bath-flakes/"),
     spirulina: storeUrl("/product/spirulina/"),
