@@ -156,14 +156,6 @@ function Index() {
         </div>
       </section>
 
-      <section aria-label="Why True Form Life" className="border-y border-line bg-surface">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-line sm:grid-cols-4">
-          {[[MapPin,"Canadian owned"],[PackageCheck,"Ships coast to coast"],[TestTube2,"Clean ingredients, no fillers"],[Star,"Real Google reviews"]].map(([Icon,label]) => {
-            const TrustIcon = Icon as typeof MapPin;
-            return <div key={label as string} className="flex min-h-28 flex-col items-center justify-center gap-2 bg-surface px-3 text-center"><TrustIcon className="text-primary" /><span className="text-sm font-bold sm:text-base">{label as string}</span></div>;
-          })}
-        </div>
-      </section>
 
       <section id="find-your-fit" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
