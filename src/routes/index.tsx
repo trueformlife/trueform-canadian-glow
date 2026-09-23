@@ -16,6 +16,19 @@ import { Button } from "@/components/ui/button";
 import { shopLinks } from "@/config/shopLinks";
 import heroImage from "@/assets/tfl-hero.jpg";
 import logoImage from "@/assets/tfl-logo.png";
+import charcoalImage from "@/assets/product-images/activated-charcoal.png.asset.json";
+import bathFlakesImage from "@/assets/product-images/bath-flakes.png.asset.json";
+import brainFuelImage from "@/assets/product-images/brain-fuel.png.asset.json";
+import chlorellaImage from "@/assets/product-images/chlorella.png.asset.json";
+import collagenImage from "@/assets/product-images/collagen.jpg.asset.json";
+import completeTruthImage from "@/assets/product-images/complete-truth-protein.png.asset.json";
+import creatineImage from "@/assets/product-images/creatine.png.asset.json";
+import liquidMagImage from "@/assets/product-images/liquid-mag.png.asset.json";
+import macaImage from "@/assets/product-images/maca.png.asset.json";
+import magteinImage from "@/assets/product-images/magtein.jpg.asset.json";
+import spirulinaImage from "@/assets/product-images/spirulina.jpg.asset.json";
+import turmericImage from "@/assets/product-images/turmeric.png.asset.json";
+import vanillaProteinImage from "@/assets/product-images/vanilla-protein.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,23 +44,23 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Product = { name: string; price: string; why: string; href: string; badge?: "New" | "Save" };
+type Product = { name: string; price: string; why: string; href: string; badge?: "New" | "Save"; image?: { url: string } };
 
 const p = shopLinks.products;
 const products: Record<string, Product> = {
-  liquidMag: { name: "Liquid Mag", price: "37.94", why: "Fast, easy magnesium support.", href: p.liquidMag },
-  magtein: { name: "Magtein", price: "65.99", why: "Magnesium for focus and calm.", href: p.magtein, badge: "New" },
-  bathFlakes: { name: "Bath Flakes", price: "21.99", why: "A simple soak for tired muscles.", href: p.bathFlakes },
-  spirulina: { name: "Spirulina", price: "26.39", why: "Clean greens for everyday energy.", href: p.spirulina },
-  chlorella: { name: "Chlorella", price: "26.39", why: "Whole-food greens and detox support.", href: p.chlorella },
-  brainFuel: { name: "Brain Fuel MCT Oil", price: "31.99", why: "Clean fuel for steady focus.", href: p.brainFuel },
-  creatine: { name: "Creatine Monohydrate", price: "49.99", why: "Daily support for strength and muscle.", href: p.creatine, badge: "New" },
-  vanillaProtein: { name: "Vanilla Protein", price: "40.69", why: "Easy protein without the fillers.", href: p.vanillaProtein },
-  completeTruth: { name: "Complete Truth Protein", price: "36.29", why: "Real-food protein in every scoop.", href: p.completeTruthProtein },
-  turmeric: { name: "Joint Strength: Platinum Turmeric", price: "49.95", why: "Targeted support for active joints.", href: p.turmeric },
-  collagen: { name: "Organic Collagen Peptides", price: "69.99", why: "Supports skin, joints and strong tissue.", href: p.collagen },
-  maca: { name: "Maca", price: "19.99", why: "Plant-based hormone and energy support.", href: p.maca },
-  charcoal: { name: "Activated Charcoal", price: "49.49", why: "Simple digestive support when needed.", href: p.charcoal },
+  liquidMag: { name: "Liquid Mag", price: "37.94", why: "Fast, easy magnesium support.", href: p.liquidMag, image: liquidMagImage },
+  magtein: { name: "Magtein", price: "65.99", why: "Magnesium for focus and calm.", href: p.magtein, badge: "New", image: magteinImage },
+  bathFlakes: { name: "Bath Flakes", price: "21.99", why: "A simple soak for tired muscles.", href: p.bathFlakes, image: bathFlakesImage },
+  spirulina: { name: "Spirulina", price: "26.39", why: "Clean greens for everyday energy.", href: p.spirulina, image: spirulinaImage },
+  chlorella: { name: "Chlorella", price: "26.39", why: "Whole-food greens and detox support.", href: p.chlorella, image: chlorellaImage },
+  brainFuel: { name: "Brain Fuel MCT Oil", price: "31.99", why: "Clean fuel for steady focus.", href: p.brainFuel, image: brainFuelImage },
+  creatine: { name: "Creatine Monohydrate", price: "49.99", why: "Daily support for strength and muscle.", href: p.creatine, badge: "New", image: creatineImage },
+  vanillaProtein: { name: "Vanilla Protein", price: "40.69", why: "Easy protein without the fillers.", href: p.vanillaProtein, image: vanillaProteinImage },
+  completeTruth: { name: "Complete Truth Protein", price: "36.29", why: "Real-food protein in every scoop.", href: p.completeTruthProtein, image: completeTruthImage },
+  turmeric: { name: "Joint Strength: Platinum Turmeric", price: "49.95", why: "Targeted support for active joints.", href: p.turmeric, image: turmericImage },
+  collagen: { name: "Organic Collagen Peptides", price: "69.99", why: "Supports skin, joints and strong tissue.", href: p.collagen, image: collagenImage },
+  maca: { name: "Maca", price: "19.99", why: "Plant-based hormone and energy support.", href: p.maca, image: macaImage },
+  charcoal: { name: "Activated Charcoal", price: "49.49", why: "Simple digestive support when needed.", href: p.charcoal, image: charcoalImage },
 };
 
 const bestSellers = ["liquidMag", "collagen", "turmeric", "creatine", "bathFlakes", "vanillaProtein"];
@@ -57,16 +70,20 @@ const bundles: Product[] = [
   { name: "Liquid Mag Promo Bundle", price: "35.19", why: "Our magnesium favourite at bundle value.", href: p.liquidMagBundle, badge: "Save" },
 ];
 
-function ProductVisual({ name, compact = false }: { name: string; compact?: boolean }) {
+function ProductVisual({ name, image, compact = false }: { name: string; image?: { url: string }; compact?: boolean }) {
   return (
     <div className={`relative grid place-items-center overflow-hidden bg-secondary ${compact ? "h-36" : "h-44"}`} aria-hidden="true">
-      <div className="absolute inset-x-0 bottom-0 h-10 bg-primary/15" />
-      <div className="relative h-28 w-16 rounded-md border-2 border-primary/35 bg-card shadow-lg">
-        <div className="h-5 rounded-t bg-primary" />
-        <div className="mx-auto mt-4 h-1.5 w-8 rounded bg-accent" />
-        <div className="mx-auto mt-2 h-1 w-10 rounded bg-royal/30" />
-        <div className="mx-auto mt-1 h-1 w-7 rounded bg-royal/20" />
-      </div>
+      <div className="absolute inset-x-0 bottom-0 h-14 bg-primary/15" />
+      {image ? (
+        <img src={image.url} alt="" loading="lazy" className="relative h-full w-full object-contain p-4" />
+      ) : (
+        <div className="relative h-28 w-16 rounded-md border-2 border-primary/35 bg-card shadow-lg">
+          <div className="h-5 rounded-t bg-primary" />
+          <div className="mx-auto mt-4 h-1.5 w-8 rounded bg-accent" />
+          <div className="mx-auto mt-2 h-1 w-10 rounded bg-royal/30" />
+          <div className="mx-auto mt-1 h-1 w-7 rounded bg-royal/20" />
+        </div>
+      )}
       <span className="absolute bottom-2 max-w-[90%] truncate text-xs font-bold text-secondary-foreground">{name}</span>
     </div>
   );
@@ -78,7 +95,7 @@ function ProductCard({ product, compact = false }: { product: Product | undefine
   return (
     <article className="relative flex h-full flex-col overflow-hidden rounded-lg bg-card text-card-foreground shadow-xl">
       {product.badge && <span className="absolute left-3 top-3 z-10 rounded bg-accent px-2.5 py-1 text-sm font-bold text-accent-foreground">{product.badge}</span>}
-      <ProductVisual name={product.name} compact={compact} />
+      <ProductVisual name={product.name} image={product.image} compact={compact} />
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-xl font-bold leading-tight">{product.name}</h3>
         <p className="mt-1 text-base text-muted-foreground">{product.why}</p>
