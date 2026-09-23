@@ -125,9 +125,25 @@ function Index() {
         Free shipping across Canada on orders over <strong className="text-accent">$200</strong>. Canadian owned.
       </div>
       <header className="sticky top-0 z-50 border-b border-line bg-background/95 backdrop-blur">
-        <div className="mx-auto grid h-16 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 sm:h-20 sm:px-6">
-          <img src={logoImage} alt="True Form Life" width={1024} height={102} className="h-auto w-48 max-w-full sm:w-64" />
-          <Button asChild className="min-w-24 px-5"><a href={shopLinks.shop}>Shop</a></Button>
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:h-20 sm:gap-4 sm:px-6">
+          <img src={logoImage} alt="True Form Life" width={1024} height={102} className="h-auto w-32 shrink-0 sm:w-56" />
+          <div className="relative min-w-0 flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                if (!searching && event.target.value.trim().length > 0) {
+                  document.getElementById("find-your-fit")?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              placeholder="Search products…"
+              aria-label="Search products"
+              className="h-12 w-full rounded-lg border-2 border-line bg-card pl-10 pr-3 text-base text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+            />
+          </div>
+          <Button asChild className="shrink-0 px-5"><a href={shopLinks.shop}>Shop</a></Button>
         </div>
       </header>
 
@@ -161,17 +177,6 @@ function Index() {
       <section id="find-your-fit" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
           <SectionTitle kicker="Find your fit">Where do you want to start?</SectionTitle>
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search any product…"
-              aria-label="Search products"
-              className="min-h-12 w-full rounded-lg border-2 border-line bg-card pl-12 pr-4 text-[17px] text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
-            />
-          </div>
           {searching ? (
             <div className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
               {searchResults.length > 0 ? searchResults.map((id) => <ProductCard key={id} product={products[id]} compact />) : <p className="col-span-full py-6 text-center text-lg text-muted-foreground">No products found for “{query}”. Try another search.</p>}
