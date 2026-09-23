@@ -56,7 +56,7 @@ const products: Record<string, Product> = {
 
 const goals = [
   { id: "sleep", label: "Sleep & stress", icon: MoonStar, products: ["liquidMag", "bathFlakes", "magtein"] },
-  { id: "energy", label: "Energy & focus", icon: Zap, products: ["spirulina", "brainFuel", "magtein"] },
+  { id: "energy", label: "Energy & focus", icon: Zap, products: ["magtein"] },
   { id: "strength", label: "Strength & muscle", icon: Dumbbell, products: ["creatine", "vanillaProtein", "completeTruth"] },
   { id: "joints", label: "Joints & skin", icon: Sparkles, products: ["turmeric", "collagen"] },
   { id: "gut", label: "Gut & detox", icon: Leaf, products: ["chlorella", "charcoal"] },
