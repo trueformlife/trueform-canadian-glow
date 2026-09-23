@@ -110,7 +110,13 @@ function SectionTitle({ kicker, children }: { kicker?: string; children: React.R
 
 function Index() {
   const [selectedGoal, setSelectedGoal] = useState("sleep");
+  const [query, setQuery] = useState("");
   const selected = goals.find((goal) => goal.id === selectedGoal) ?? goals[0];
+  const normalizedQuery = query.trim().toLowerCase();
+  const searching = normalizedQuery.length > 0;
+  const searchResults = Object.entries(products)
+    .filter(([, product]) => product.name.toLowerCase().includes(normalizedQuery) || product.why.toLowerCase().includes(normalizedQuery))
+    .map(([id]) => id);
 
   return (
     <main className="overflow-hidden bg-background text-foreground">
@@ -123,6 +129,16 @@ function Index() {
           <Button asChild className="min-w-24 px-5"><a href={shopLinks.shop}>Shop</a></Button>
         </div>
       </header>
+
+      <section aria-label="Why True Form Life" className="border-b border-line bg-surface">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-line sm:grid-cols-4">
+          {[[MapPin,"Canadian owned"],[PackageCheck,"Ships coast to coast"],[TestTube2,"Clean ingredients, no fillers"],[Star,"Real Google reviews"]].map(([Icon,label]) => {
+            const TrustIcon = Icon as typeof MapPin;
+            return <div key={label as string} className="flex min-h-28 flex-col items-center justify-center gap-2 bg-surface px-3 text-center"><TrustIcon className="text-primary" /><span className="text-sm font-bold sm:text-base">{label as string}</span></div>;
+          })}
+        </div>
+      </section>
+
 
       <section className="relative min-h-[calc(100svh-104px)] sm:min-h-[680px]">
         <img src={heroImage} alt="Confident active woman enjoying the Canadian outdoors" width={1280} height={960} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-[68%_center]" />
