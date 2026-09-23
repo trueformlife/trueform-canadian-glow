@@ -70,7 +70,7 @@ const bundles: Product[] = [
   { name: "Liquid Mag Promo Bundle", price: "35.19", why: "Our magnesium favourite at bundle value.", href: p.liquidMagBundle, badge: "Save" },
 ];
 
-function ProductVisual({ name, image, compact = false }: { name: string; image?: { url: string }; compact?: boolean }) {
+function ProductVisual({ name, image, compact = false }: { name: string; image: { url: string } | undefined; compact?: boolean }) {
   return (
     <div className={`relative grid place-items-center overflow-hidden bg-secondary ${compact ? "h-36" : "h-44"}`} aria-hidden="true">
       <div className="absolute inset-x-0 bottom-0 h-14 bg-primary/15" />
