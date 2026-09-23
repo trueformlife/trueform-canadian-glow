@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   ArrowRight,
   Brain,
@@ -110,9 +110,8 @@ function SectionTitle({ kicker, children }: { kicker?: string; children: React.R
 }
 
 function Index() {
-  const [selectedGoal, setSelectedGoal] = useState("sleep");
   const [query, setQuery] = useState("");
-  const selected = goals.find((goal) => goal.id === selectedGoal) ?? goals[0];
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const normalizedQuery = query.trim().toLowerCase();
   const searching = normalizedQuery.length > 0;
   const searchResults = Object.entries(products)
@@ -130,6 +129,7 @@ function Index() {
           <div className="relative min-w-0 flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <input
+              ref={searchInputRef}
               type="search"
               value={query}
               onChange={(event) => {
@@ -167,36 +167,23 @@ function Index() {
             <p className="mt-4 max-w-lg text-[17px] leading-relaxed text-foreground/85 sm:text-xl">Clean supplements from a Canadian family business. No fillers. No junk. Just what works, shipped anywhere in Canada.</p>
             <div className="mt-6 grid gap-3 sm:flex">
               <Button asChild size="lg" className="w-full sm:w-auto"><a href={shopLinks.shop}>Shop all <ArrowRight /></a></Button>
-              <Button asChild size="lg" variant="outline" className="w-full border-foreground/50 bg-background/70 text-foreground sm:w-auto"><a href="#find-your-fit">Find your fit</a></Button>
+              <Button size="lg" variant="outline" className="w-full border-foreground/50 bg-background/70 text-foreground sm:w-auto" onClick={() => searchInputRef.current?.focus()}>Find your fit</Button>
             </div>
           </div>
         </div>
       </section>
 
 
-      <section id="find-your-fit" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
-        <div className="mx-auto max-w-7xl">
-          <SectionTitle kicker="Find your fit">Where do you want to start?</SectionTitle>
-          {searching ? (
+      {searching && (
+        <section id="find-your-fit" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-7xl">
+            <SectionTitle kicker="Find your fit">Search results</SectionTitle>
             <div className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
               {searchResults.length > 0 ? searchResults.map((id) => <ProductCard key={id} product={products[id]} compact />) : <p className="col-span-full py-6 text-center text-lg text-muted-foreground">No products found for “{query}”. Try another search.</p>}
             </div>
-          ) : (
-            <>
-              <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-6">
-                {goals.map((goal) => {
-                  const Icon = goal.icon;
-                  const active = selectedGoal === goal.id;
-                  return <button key={goal.id} type="button" onClick={() => setSelectedGoal(goal.id)} aria-pressed={active} className={`min-h-28 rounded-lg border-2 p-3 text-left transition-all active:scale-[0.98] ${active ? "border-accent bg-surface-strong shadow-accent" : "border-line bg-surface hover:border-primary"}`}><Icon className={active ? "text-accent" : "text-primary"} /><span className="mt-3 block font-display text-base font-bold leading-tight sm:text-lg">{goal.label}</span></button>;
-                })}
-              </div>
-              <div key={selected.id} className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
-                {selected.products.map((id) => <ProductCard key={id} product={products[id]} compact />)}
-              </div>
-            </>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       <section className="bg-secondary px-4 py-16 text-secondary-foreground sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
