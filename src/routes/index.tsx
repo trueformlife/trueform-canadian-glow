@@ -1,13 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   Brain,
-  Dumbbell,
-  HeartPulse,
-  Leaf,
   MapPin,
-  MoonStar,
   PackageCheck,
   Search,
   ShieldCheck,
@@ -15,7 +11,6 @@ import {
   Star,
   TestTube2,
   Users,
-  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { shopLinks } from "@/config/shopLinks";
@@ -54,15 +49,6 @@ const products: Record<string, Product> = {
   maca: { name: "Maca", price: "19.99", why: "Plant-based hormone and energy support.", href: p.maca },
   charcoal: { name: "Activated Charcoal", price: "49.49", why: "Simple digestive support when needed.", href: p.charcoal },
 };
-
-const goals = [
-  { id: "sleep", label: "Sleep & stress", icon: MoonStar, products: ["liquidMag", "bathFlakes", "magtein"] },
-  { id: "energy", label: "Energy & focus", icon: Zap, products: ["magtein"] },
-  { id: "strength", label: "Strength & muscle", icon: Dumbbell, products: ["creatine", "vanillaProtein", "completeTruth"] },
-  { id: "joints", label: "Joints & skin", icon: Sparkles, products: ["turmeric", "collagen"] },
-  { id: "gut", label: "Gut & detox", icon: Leaf, products: ["chlorella", "charcoal"] },
-  { id: "hormones", label: "Hormone support", icon: HeartPulse, products: ["maca", "liquidMag"] },
-] as const;
 
 const bestSellers = ["liquidMag", "collagen", "turmeric", "creatine", "bathFlakes", "vanillaProtein"];
 const bundles: Product[] = [
@@ -118,6 +104,14 @@ function Index() {
     .filter(([, product]) => product.name.toLowerCase().includes(normalizedQuery) || product.why.toLowerCase().includes(normalizedQuery))
     .map(([id]) => id);
 
+  useEffect(() => {
+    if (!searching) return;
+
+    requestAnimationFrame(() => {
+      document.getElementById("search-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [searching, normalizedQuery]);
+
   return (
     <main className="overflow-hidden bg-background text-foreground">
       <div className="bg-surface-strong px-3 py-2 text-center text-sm font-semibold sm:text-base">
@@ -132,12 +126,7 @@ function Index() {
               ref={searchInputRef}
               type="search"
               value={query}
-              onChange={(event) => {
-                setQuery(event.target.value);
-                if (!searching && event.target.value.trim().length > 0) {
-                  document.getElementById("find-your-fit")?.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
+              onChange={(event) => setQuery(event.target.value)}
               placeholder="Search products…"
               aria-label="Search products"
               className="h-12 w-full rounded-lg border-2 border-line bg-card pl-10 pr-3 text-base text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
@@ -175,7 +164,7 @@ function Index() {
 
 
       {searching && (
-        <section id="find-your-fit" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
+        <section id="search-results" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-7xl">
             <SectionTitle kicker="Find your fit">Search results</SectionTitle>
             <div className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
