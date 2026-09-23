@@ -15,7 +15,6 @@ import {
   Star,
   TestTube2,
   Users,
-  Wind,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { shopLinks } from "@/config/shopLinks";
@@ -105,10 +104,10 @@ function ProductCard({ product, compact = false }: { product: Product | undefine
   if (!product) return null;
 
   return (
-    <article className="relative flex h-full flex-col overflow-hidden rounded-lg bg-card text-card-foreground shadow-xl">
-      {product.badge && <span className="absolute left-3 top-3 z-10 rounded bg-accent px-2.5 py-1 text-sm font-bold text-accent-foreground">{product.badge}</span>}
+    <article className="flex h-full flex-col overflow-hidden rounded-lg bg-card text-card-foreground shadow-xl">
       <ProductVisual name={product.name} image={product.image} compact={compact} />
       <div className="flex flex-1 flex-col p-4">
+        {product.badge && <span className="mb-2 w-fit rounded bg-accent px-2.5 py-1 text-sm font-bold text-accent-foreground">{product.badge}</span>}
         <h3 className="text-xl font-bold leading-tight">{product.name}</h3>
         <p className="mt-1 text-base text-muted-foreground">{product.why}</p>
         <p className="mt-3 font-display text-lg font-bold text-royal">from ${product.price} CAD</p>
