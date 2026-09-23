@@ -85,9 +85,9 @@ const bundles: Product[] = [
 
 function ProductVisual({ name, image, compact = false }: { name: string; image: { url: string } | undefined; compact?: boolean }) {
   return (
-    <div className={`relative grid place-items-center overflow-hidden bg-card ${compact ? "h-56" : "h-64"}`} aria-hidden="true">
+    <div className="relative grid aspect-square place-items-center overflow-hidden bg-card" aria-hidden="true">
       {image ? (
-        <img src={image.url} alt="" loading="lazy" className="h-full w-full object-contain p-5" />
+        <img src={image.url} alt="" loading="lazy" className={`h-full w-full object-contain ${compact ? "p-4" : "p-5"}`} />
       ) : (
         <div className="relative h-32 w-20 rounded-md border-2 border-primary/35 bg-secondary shadow-lg">
           <div className="h-5 rounded-t bg-primary" />
