@@ -9,6 +9,7 @@ import {
   MapPin,
   MoonStar,
   PackageCheck,
+  Search,
   ShieldCheck,
   Sparkles,
   Star,
@@ -160,16 +161,35 @@ function Index() {
       <section id="find-your-fit" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
           <SectionTitle kicker="Find your fit">Where do you want to start?</SectionTitle>
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-6">
-            {goals.map((goal) => {
-              const Icon = goal.icon;
-              const active = selectedGoal === goal.id;
-              return <button key={goal.id} type="button" onClick={() => setSelectedGoal(goal.id)} aria-pressed={active} className={`min-h-28 rounded-lg border-2 p-3 text-left transition-all active:scale-[0.98] ${active ? "border-accent bg-surface-strong shadow-accent" : "border-line bg-surface hover:border-primary"}`}><Icon className={active ? "text-accent" : "text-primary"} /><span className="mt-3 block font-display text-base font-bold leading-tight sm:text-lg">{goal.label}</span></button>;
-            })}
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search any product…"
+              aria-label="Search products"
+              className="min-h-12 w-full rounded-lg border-2 border-line bg-card pl-12 pr-4 text-[17px] text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+            />
           </div>
-          <div key={selected.id} className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
-            {selected.products.map((id) => <ProductCard key={id} product={products[id]} compact />)}
-          </div>
+          {searching ? (
+            <div className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
+              {searchResults.length > 0 ? searchResults.map((id) => <ProductCard key={id} product={products[id]} compact />) : <p className="col-span-full py-6 text-center text-lg text-muted-foreground">No products found for “{query}”. Try another search.</p>}
+            </div>
+          ) : (
+            <>
+              <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-6">
+                {goals.map((goal) => {
+                  const Icon = goal.icon;
+                  const active = selectedGoal === goal.id;
+                  return <button key={goal.id} type="button" onClick={() => setSelectedGoal(goal.id)} aria-pressed={active} className={`min-h-28 rounded-lg border-2 p-3 text-left transition-all active:scale-[0.98] ${active ? "border-accent bg-surface-strong shadow-accent" : "border-line bg-surface hover:border-primary"}`}><Icon className={active ? "text-accent" : "text-primary"} /><span className="mt-3 block font-display text-base font-bold leading-tight sm:text-lg">{goal.label}</span></button>;
+                })}
+              </div>
+              <div key={selected.id} className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
+                {selected.products.map((id) => <ProductCard key={id} product={products[id]} compact />)}
+              </div>
+            </>
+          )}
         </div>
       </section>
 
