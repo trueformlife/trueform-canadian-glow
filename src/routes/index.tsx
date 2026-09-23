@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { shopLinks } from "@/config/shopLinks";
 import heroImage from "@/assets/tfl-hero.jpg";
+import drewDorothyImage from "@/assets/drew-dorothy.jpg.asset.json";
 import logoImage from "@/assets/tfl-logo.png";
 import charcoalImage from "@/assets/product-images/activated-charcoal.png.asset.json";
 import bathFlakesImage from "@/assets/product-images/bath-flakes.png.asset.json";
@@ -70,7 +71,7 @@ const products: Record<string, Product> = {
   charcoal: { name: "Activated Charcoal", price: "49.49", why: "Simple digestive support when needed.", href: p.charcoal, image: charcoalImage },
 };
 
-const bestSellers = ["liquidMag", "collagen", "turmeric", "creatine", "bathFlakes", "vanillaProtein"];
+const bestSellers = ["liquidMag", "turmeric", "vanillaProtein"];
 const goals: [Goal, ...Goal[]] = [
   { id: "sleep", title: "Sleep & stress", productIds: ["liquidMag", "magSpray", "bathFlakes", "magtein"], icon: Moon },
   { id: "energy", title: "Energy & focus", productIds: ["spirulina", "brainFuel", "magtein"], icon: Brain },
@@ -235,10 +236,30 @@ function Index() {
         </section>
       )}
 
+      <section className="px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mx-auto max-w-7xl">
+          <SectionTitle kicker="Featured this month">20% off Brain Fuel MCT Oil</SectionTitle>
+          <div className="mx-auto max-w-md sm:max-w-sm">
+            <article className="relative flex h-full flex-col overflow-hidden rounded-lg bg-card text-card-foreground shadow-xl">
+              <span className="absolute left-4 top-4 z-10 rounded bg-accent px-3 py-1.5 text-base font-bold text-accent-foreground">20% off</span>
+              <ProductVisual name={products.brainFuel.name} image={products.brainFuel.image} />
+              <div className="flex flex-1 flex-col p-4">
+                <h3 className="text-xl font-bold leading-tight">{products.brainFuel.name}</h3>
+                <p className="mt-1 text-base text-muted-foreground">{products.brainFuel.why}</p>
+                <p className="mt-3 font-display text-lg font-bold text-royal">from ${products.brainFuel.price} CAD</p>
+                <Button asChild className="mt-4 w-full">
+                  <a href={products.brainFuel.href}>Buy <ArrowRight /></a>
+                </Button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-secondary px-4 py-16 text-secondary-foreground sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
           <SectionTitle kicker="Most loved">Best sellers</SectionTitle>
-          <div className="no-scrollbar -mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pr-4 sm:mr-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:pr-0 lg:grid-cols-3">
+          <div className="no-scrollbar -mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pr-4 sm:mr-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pr-0">
             {bestSellers.map((id) => <div key={id} className="w-[84%] shrink-0 snap-start sm:w-auto"><ProductCard product={products[id]} /></div>)}
           </div>
         </div>
@@ -255,7 +276,7 @@ function Index() {
 
       <section className="px-4 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2 lg:items-center">
-          <div className="grid aspect-[4/3] place-items-center rounded-lg border border-line bg-surface text-center"><div><Users className="mx-auto h-12 w-12 text-primary" /><p className="mt-3 font-bold">Drew & Dorothy photo coming soon</p></div></div>
+          <img src={drewDorothyImage.url} alt="Drew and Dorothy with their kids outdoors" loading="lazy" className="aspect-[4/3] w-full rounded-lg border border-line object-cover" />
           <div><SectionTitle kicker="Our story">Made for real life.</SectionTitle><div className="space-y-2 text-lg leading-relaxed text-foreground/80"><p>We're Drew and Dorothy.</p><p>A Canadian family business.</p><p>We work with women 40+ every day.</p><p>Sleep. Energy. Strength. Hormones.</p><p>We built this line because we couldn't find clean products we'd hand our own family.</p><p>No fillers. No shortcuts.</p><p className="font-bold text-foreground">Just the stuff we use ourselves.</p></div></div>
         </div>
       </section>
@@ -275,7 +296,7 @@ function Index() {
       </section>
 
       <footer className="border-t border-line bg-background px-4 py-10 sm:px-6">
-        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-end"><div><img src={logoImage} alt="True Form Life" width={1024} height={102} loading="lazy" className="h-auto w-56" /><p className="mt-4 flex items-center gap-2 font-bold"><ShieldCheck className="text-primary" /> Proudly Canadian</p></div><nav aria-label="Footer" className="grid gap-1 text-lg"><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shop}>Shop</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shippingReturns}>Shipping & returns</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.contact}>Contact</a></nav></div>
+        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-end"><div><img src={logoImage} alt="True Form Life" width={1024} height={102} loading="lazy" className="h-auto w-56" /><p className="mt-4 flex items-center gap-2 font-bold"><ShieldCheck className="text-primary" /> Proudly Canadian</p></div><nav aria-label="Footer" className="grid gap-1 text-lg"><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shop}>Shop</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shippingReturns}>Shipping & returns</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.contact}>Contact</a><a className="flex min-h-12 items-center hover:text-primary" href="https://us.trueformlife.com/">Visit our US website</a></nav></div>
       </footer>
     </main>
   );
