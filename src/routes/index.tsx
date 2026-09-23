@@ -151,7 +151,7 @@ function Index() {
       </div>
       <header className="sticky top-0 z-50 border-b border-line bg-background/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:h-20 sm:gap-4 sm:px-6">
-          <img src={logoImage} alt="True Form Life" width={1024} height={102} className="h-auto w-32 shrink-0 sm:w-56" />
+          <img src={logoImage} alt="True Form Life" width={512} height={438} className="h-12 w-auto shrink-0 sm:h-14" />
           <div className="relative min-w-0 flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -172,7 +172,7 @@ function Index() {
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-line sm:grid-cols-4">
           {[[MapPin,"Canadian owned"],[PackageCheck,"Ships coast to coast"],[TestTube2,"Clean ingredients, no fillers"],[Star,"Real Google reviews"]].map(([Icon,label]) => {
             const TrustIcon = Icon as typeof MapPin;
-            return <div key={label as string} className="flex min-h-28 flex-col items-center justify-center gap-2 bg-surface px-3 text-center"><TrustIcon className="text-primary" /><span className="text-sm font-bold sm:text-base">{label as string}</span></div>;
+            return <div key={label as string} className="flex min-h-28 flex-col items-center justify-center gap-2 bg-surface px-3 text-center"><TrustIcon className={label === "Real Google reviews" ? "fill-current text-accent" : "text-primary"} /><span className="text-sm font-bold sm:text-base">{label as string}</span></div>;
           })}
         </div>
       </section>
@@ -184,7 +184,7 @@ function Index() {
         <div className="relative mx-auto flex min-h-[calc(100svh-104px)] max-w-7xl items-center px-4 py-8 sm:min-h-[680px] sm:px-6">
           <div className="max-w-xl">
             <p className="mb-3 font-bold text-primary">CANADIAN OWNED · WOMEN 40+</p>
-            <h1 className="text-4xl font-extrabold leading-[1.02] sm:text-6xl lg:text-7xl">Built for women 40+.<br /><span className="text-primary">Energy. Sleep. Strength.</span></h1>
+            <h1 className="text-4xl font-extrabold leading-[1.02] sm:text-6xl lg:text-7xl">Built for women <span className="text-accent">40+</span>.<br /><span className="text-primary">Energy. Sleep. Strength.</span></h1>
             <p className="mt-4 max-w-lg text-[17px] leading-relaxed text-foreground/85 sm:text-xl">Clean supplements from a Canadian family business. No fillers. No junk. Just what works, shipped anywhere in Canada.</p>
             <div className="mt-6 grid gap-3 sm:flex">
               <Button asChild size="lg" className="w-full sm:w-auto"><a href={shopLinks.shop}>Shop all <ArrowRight /></a></Button>
