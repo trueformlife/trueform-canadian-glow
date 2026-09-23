@@ -85,7 +85,9 @@ function ProductVisual({ name, compact = false }: { name: string; compact?: bool
   );
 }
 
-function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
+function ProductCard({ product, compact = false }: { product: Product | undefined; compact?: boolean }) {
+  if (!product) return null;
+
   return (
     <article className="relative flex h-full flex-col overflow-hidden rounded-lg bg-card text-card-foreground shadow-xl">
       {product.badge && <span className="absolute left-3 top-3 z-10 rounded bg-accent px-2.5 py-1 text-sm font-bold text-accent-foreground">{product.badge}</span>}
