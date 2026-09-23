@@ -1,0 +1,1 @@
+- Remove the default product cards from the Find your fit area; keep search in the top bar.
