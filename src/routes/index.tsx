@@ -260,7 +260,11 @@ function Index() {
         <div className="mx-auto max-w-7xl">
           <SectionTitle kicker="Real customers">Words from our community.</SectionTitle>
           <div className="grid gap-4 md:grid-cols-3">
-            {["Sharon MacDonald","Shauna Olsen","Debbie Rogers"].map((name) => <article key={name} className="rounded-lg bg-card p-5 text-card-foreground shadow-lg"><div className="flex gap-1 text-accent" aria-label="5 out of 5 stars">{Array.from({length:5}).map((_,i) => <Star key={i} className="fill-current" />)}</div><p className="mt-5 text-muted-foreground">Review text coming soon.</p><p className="mt-6 font-display text-lg font-bold">{name}</p></article>)}
+            {[
+              ["Sharon MacDonald","Drew and team are amazing! Best customer service ever! I never go a day without my liquid mag! And always have protein, collagen, charcoal, mag butter, magtein on hand, and pretty much use daily… especially love the bath flakes. It’s so refreshing to know that everything I get from TrueForm Life is clean and good, no additives or fillers, nothing that’s untrustworthy. The homework is done for me! Love it."],
+              ["Yvonne Cheng","The magnesium flakes are my favourite! Quality is exceptional, all the other drug store \"Epsom salts\" don't even compare. I appreciate that they're a local brand and that the formulations are of the highest quality that I can trust."],
+              ["Moira Schrader","Once again, the product arrived within days, and it was all wrapped individually with bubble wrap and included a beautiful card that said how happy they were for my support. I love that they’re local, and the product is such great quality. I’m very much enjoying the Liquid magnesium and I know I’m going to love this mango, which is new to me!!"],
+            ].map(([name, text]) => <article key={name} className="flex flex-col rounded-lg bg-card p-5 text-card-foreground shadow-lg"><div className="flex gap-1 text-accent" aria-label="5 out of 5 stars">{Array.from({length:5}).map((_,i) => <Star key={i} className="fill-current" />)}</div><p className="mt-5 text-muted-foreground">“{text}”</p><p className="mt-auto pt-6 font-display text-lg font-bold">{name}</p><p className="text-sm text-muted-foreground">Google review</p></article>)}
           </div>
           <a href="https://www.google.com/search?q=True+Form+Life+reviews" className="mt-7 inline-flex min-h-12 items-center gap-2 font-bold text-royal underline underline-offset-4">Read our Google reviews <ArrowRight /></a>
         </div>
