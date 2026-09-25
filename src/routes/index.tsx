@@ -249,12 +249,6 @@ function Index() {
         </div>
       </section>
 
-      <section className="px-4 py-16 sm:px-6 sm:py-24">
-        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2 lg:items-center">
-          <img src={drewDorothyImage.url} alt="Drew and Dorothy with their kids outdoors" loading="lazy" className="aspect-[4/3] w-full rounded-lg border border-line object-cover" />
-          <div><SectionTitle kicker="Our story">Made for real life.</SectionTitle><div className="space-y-2 text-lg leading-relaxed text-foreground/80"><p>We're Drew and Dorothy.</p><p>A Canadian family business.</p><p>We work with women 40+ every day.</p><p>Sleep. Energy. Strength. Hormones.</p><p>We built this line because we couldn't find clean products we'd hand our own family.</p><p>No fillers. No shortcuts.</p><p className="font-bold text-foreground">Just the stuff we use ourselves.</p></div></div>
-        </div>
-      </section>
 
       <section className="bg-secondary px-4 py-16 text-secondary-foreground sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
