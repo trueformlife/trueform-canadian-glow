@@ -35,6 +35,7 @@ import magteinImage from "@/assets/product-images/magtein.jpg.asset.json";
 import spirulinaImage from "@/assets/product-images/spirulina.jpg.asset.json";
 import turmericImage from "@/assets/product-images/turmeric.png.asset.json";
 import vanillaProteinImage from "@/assets/product-images/vanilla-protein.png.asset.json";
+import digestionBookImage from "@/assets/digestion-3d-book.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
