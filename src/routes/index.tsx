@@ -80,11 +80,6 @@ const goals: [Goal, ...Goal[]] = [
   { id: "gut", title: "Gut & detox", productIds: ["chlorella", "charcoal"], icon: Leaf },
   { id: "hormone", title: "Hormone support", productIds: ["maca", "liquidMag"], icon: HeartPulse },
 ];
-const bundles: Product[] = [
-  { name: "Ultimate Wellness Bundle", price: "160.00", why: "Everyday essentials, bundled together.", href: p.ultimateBundle, badge: "Save" },
-  { name: "Glow From Within Bundle", price: "105.99", why: "Support for skin, joints and daily glow.", href: p.glowBundle, badge: "Save" },
-  { name: "Liquid Mag Promo Bundle", price: "35.19", why: "Our magnesium favourite at bundle value.", href: p.liquidMagBundle, badge: "Save" },
-];
 
 function ProductVisual({ name, image, compact = false }: { name: string; image: { url: string } | undefined; compact?: boolean }) {
   return (
@@ -250,15 +245,6 @@ function Index() {
           <SectionTitle kicker="Most loved">Best sellers</SectionTitle>
           <div className="no-scrollbar -mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pr-4 sm:mr-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pr-0">
             {bestSellers.map((id) => <div key={id} className="w-[84%] shrink-0 snap-start sm:w-auto"><ProductCard product={products[id]} /></div>)}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-royal px-4 py-16 text-royal-foreground sm:px-6 sm:py-24">
-        <div className="mx-auto max-w-7xl">
-          <SectionTitle kicker="Better together">Stack it. Save.</SectionTitle>
-          <div className="no-scrollbar -mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pr-4 sm:mr-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pr-0">
-            {bundles.map((bundle) => <div key={bundle.name} className="w-[84%] shrink-0 snap-start sm:w-auto"><ProductCard product={bundle} /></div>)}
           </div>
         </div>
       </section>
