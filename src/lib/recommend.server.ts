@@ -5,7 +5,7 @@ import { catalogForAi } from "./catalog";
 export type Pick = { id: string; reason: string };
 
 export async function recommendProducts(goal: string, note: string): Promise<Pick[]> {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("AI recommendations are not configured.");
 
   const provider = createOpenAI({
