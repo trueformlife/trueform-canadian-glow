@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
+import { getRecommendations } from "@/lib/recommend.functions";
 import {
   ArrowRight,
   Brain,
   Dumbbell,
   HeartPulse,
   Leaf,
+  Loader2,
   MapPin,
   Moon,
   PackageCheck,
@@ -122,6 +125,58 @@ function SectionTitle({ kicker, children }: { kicker?: string; children: React.R
   return <div className="mb-6"><p className="font-bold uppercase text-primary">{kicker}</p><h2 className="mt-1 text-3xl font-bold leading-tight sm:text-4xl">{children}</h2></div>;
 }
 
+function AiPicks({ goalTitle }: { goalTitle: string }) {
+  const fetchPicks = useServerFn(getRecommendations);
+  const [note, setNote] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [picks, setPicks] = useState<{ id: string; reason: string }[] | null>(null);
+
+  async function ask() {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetchPicks({ data: { goal: goalTitle, note } });
+      if (res.error) setError(res.error);
+      else setPicks(res.picks);
+    } catch {
+      setError("We couldn't get personal picks right now. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="mt-10 rounded-lg border-2 border-line bg-surface p-5 sm:p-6">
+      <p className="flex items-center gap-2 font-bold uppercase text-primary"><Sparkles className="h-5 w-5 text-accent" /> Personal picks</p>
+      <h3 className="mt-1 text-2xl font-bold">Tell us a bit more about {goalTitle.toLowerCase()}.</h3>
+      <p className="mt-2 text-foreground/80">Our AI helper picks the best fit from our line. Optional.</p>
+      <form className="mt-4 grid gap-3 sm:flex" onSubmit={(e) => { e.preventDefault(); void ask(); }}>
+        <input
+          value={note}
+          onChange={(e) => setNote(e.target.value.slice(0, 300))}
+          placeholder="e.g. I wake up at 3am and feel wired"
+          aria-label="Tell us more about your goal"
+          className="h-12 w-full flex-1 rounded-lg border-2 border-line bg-card px-4 text-base text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+        />
+        <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+          {loading ? <><Loader2 className="animate-spin" /> Finding picks…</> : <>Get my picks <ArrowRight /></>}
+        </Button>
+      </form>
+      {error && <p role="alert" className="mt-4 text-accent">{error}</p>}
+      {picks && picks.length === 0 && !error && <p className="mt-4 text-foreground/80">No personal picks this time. The picks above are a great place to start.</p>}
+      {picks && picks.length > 0 && (
+        <div className="mt-6 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
+          {picks.map((pick) => {
+            const product = products[pick.id];
+            return product ? <ProductCard key={pick.id} product={{ ...product, why: pick.reason }} compact /> : null;
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Index() {
   const [query, setQuery] = useState("");
   const [selectedGoalId, setSelectedGoalId] = useState(goals[0].id);
@@ -217,6 +272,7 @@ function Index() {
           <div key={selectedGoal.id} className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
             {selectedGoal.productIds.map((id) => <ProductCard key={id} product={products[id]} compact />)}
           </div>
+          <AiPicks key={`ai-${selectedGoal.id}`} goalTitle={selectedGoal.title} />
         </div>
       </section>
 
