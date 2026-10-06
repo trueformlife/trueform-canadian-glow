@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { getRecommendations } from "@/lib/recommend.functions";
+import { getLiveStore } from "@/lib/store.functions";
 import {
   ArrowRight,
   Brain,
@@ -53,10 +54,11 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  loader: () => getLiveStore(),
   component: Index,
 });
 
-type Product = { name: string; price: string; why: string; href: string; badge?: "New" | "Save"; image?: { url: string } };
+type Product = { name: string; price: string; why: string; href: string; badge?: "New" | "Save"; image?: { url: string } | undefined };
 type Goal = { id: string; title: string; productIds: string[]; icon: typeof Moon };
 
 const p = shopLinks.products;
@@ -104,8 +106,13 @@ function ProductVisual({ name, image, compact = false }: { name: string; image: 
   );
 }
 
-function ProductCard({ product, compact = false }: { product: Product | undefined; compact?: boolean }) {
-  if (!product) return null;
+const LivePrices = createContext<Record<string, string>>({});
+const slugOf = (href: string) => href.match(/\/product\/([^/?#]+)/)?.[1] ?? "";
+
+function ProductCard({ product: base, compact = false }: { product: Product | undefined; compact?: boolean }) {
+  const livePrices = useContext(LivePrices);
+  if (!base) return null;
+  const product = { ...base, price: livePrices[slugOf(base.href)] ?? base.price };
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-lg bg-card text-card-foreground shadow-xl">
@@ -180,6 +187,11 @@ function AiPicks({ goalTitle }: { goalTitle: string }) {
 }
 
 function Index() {
+  const live = Route.useLoaderData();
+  const featuredMatch = live.featured ? Object.values(products).find((x) => slugOf(x.href) === live.featured!.slug) : undefined;
+  const featuredProduct: Product | null = live.featured
+    ? { name: featuredMatch?.name ?? live.featured.name, why: featuredMatch?.why ?? "This month's pick, 20% off.", price: live.featured.price, href: featuredMatch?.href ?? live.featured.href, image: featuredMatch?.image ?? (live.featured.image ? { url: live.featured.image } : undefined) }
+    : null;
   const [query, setQuery] = useState("");
   const [selectedGoalId, setSelectedGoalId] = useState(goals[0].id);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -199,6 +211,7 @@ function Index() {
   }, [searching, normalizedQuery]);
 
   return (
+    <LivePrices.Provider value={live.prices}>
     <main className="overflow-hidden bg-background text-foreground">
       <div className="bg-surface-strong px-3 py-2 text-center text-sm font-semibold sm:text-base">
         Free shipping across Canada on orders over <strong className="text-accent">$200</strong>. Canadian owned.
@@ -297,14 +310,16 @@ function Index() {
         </section>
       )}
 
-      <section className="px-4 py-16 sm:px-6 sm:py-24">
-        <div className="mx-auto max-w-7xl">
-          <SectionTitle kicker="Featured this month">20% off Brain Fuel MCT Oil</SectionTitle>
-          <div className="mx-auto max-w-md sm:max-w-sm">
-            <ProductCard product={{ ...products["brainFuel"]!, badge: "Save" }} />
+      {featuredProduct && (
+        <section className="px-4 py-16 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-7xl">
+            <SectionTitle kicker="Featured this month">20% off {featuredProduct.name}</SectionTitle>
+            <div className="mx-auto max-w-md sm:max-w-sm">
+              <ProductCard product={{ ...featuredProduct, badge: "Save" }} />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="bg-secondary px-4 py-16 text-secondary-foreground sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
@@ -346,5 +361,6 @@ function Index() {
         <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-end"><div><img src={logoImage} alt="True Form Life" width={1024} height={102} loading="lazy" className="h-auto w-56" /><p className="mt-4 flex items-center gap-2 font-bold"><ShieldCheck className="text-primary" /> Proudly Canadian</p></div><nav aria-label="Footer" className="grid gap-1 text-lg"><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shop}>Shop</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shippingReturns}>Shipping & returns</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.contact}>Contact</a><a className="flex min-h-12 items-center hover:text-primary" href="https://us.trueformlife.com/">Visit our US website</a></nav></div>
       </footer>
     </main>
+    </LivePrices.Provider>
   );
 }
