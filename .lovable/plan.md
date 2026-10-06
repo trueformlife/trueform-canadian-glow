@@ -1,17 +1,22 @@
-# True Form Life home page
+# Add an account link to the top bar
 
-## Build
-- Replace the blank home page with the requested ten-section, mobile-first shopping gateway.
-- Preserve the TFL identity with Outfit headings, Figtree body text, compact rounded cards, and the specified navy, royal blue, sky blue, and pink-red accents.
-- Keep the announcement and navigation visible, fit the essential hero content within a 375px first screen, and optimize the product browsing patterns for touch.
-- Add interactive goal filtering, horizontal mobile product carousels, external same-tab store links, review placeholders, community links, and footer links.
+## Recommendation
+Use **My Account**. It is short, familiar, and works for both shoppers signing in and returning customers managing their account.
 
-## Content and imagery
-- Generate a confident Canadian woman 40–50s lifestyle image for the hero.
-- Use lightweight, lazy-loaded visual placeholders for product and story images until real photography is supplied.
-- Keep all copy short, direct, and compliant with the banned-word list.
+Other good options:
+- **Account** — shortest option, useful if space is tight on phones.
+- **Sign In** — clearest for signed-out visitors, but less accurate once someone is already signed in.
+- **Customer Login** — explicit, though more formal.
+- **My TFL** — warmer and branded, but less immediately obvious.
 
-## Technical details
-- Put the WooCommerce domain and every store URL in `src/config/shopLinks.ts`.
-- Add the Meta Pixel placeholder to the document head without activating tracking until an ID is provided.
-- Add unique home-page metadata and verify phone and desktop layouts in the live preview.
+Avoid **Log In/My Account** because the slash makes the label longer and harder to scan.
+
+## Changes
+- Add the WooCommerce account URL (`https://trueformlife.com/my-account/`) to the existing centralized store-links configuration.
+- Add a **My Account** action in the sticky top bar beside the Shop button.
+- Use an account icon with accessible text and keep the link in the same tab.
+- Preserve the product search and make all top-bar controls fit cleanly on small phones without overlap.
+
+## Verification
+- Check the top bar at 375px and desktop widths.
+- Confirm the account link opens the supplied WooCommerce page and the Shop and search controls still work.
