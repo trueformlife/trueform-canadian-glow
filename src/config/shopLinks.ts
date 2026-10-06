@@ -4,6 +4,7 @@ const storeUrl = (path: string) => `${STORE_BASE_URL}${path}`;
 
 export const shopLinks = {
   shop: storeUrl("/shop/"),
+  cart: storeUrl("/cart/"),
   account: storeUrl("/my-account/"),
   shippingReturns: storeUrl("/return-refund-policy"),
   contact: storeUrl("/contact/"),
