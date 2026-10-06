@@ -301,8 +301,24 @@ function Index() {
               </div>
             )}
           </div>
-        </div>
-      </header>
+          </div>
+          {mobileSearchOpen && (
+            <div className="border-t border-line bg-background px-4 py-3 sm:hidden">
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  autoFocus
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search products…"
+                  aria-label="Search products"
+                  className="h-12 w-full rounded-lg border-2 border-line bg-card pl-10 pr-3 text-base text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                />
+              </div>
+            </div>
+          )}
+        </header>
 
       <section aria-label="Why True Form Life" className="border-b border-line bg-surface">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-line sm:grid-cols-4">
