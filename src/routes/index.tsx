@@ -281,7 +281,7 @@ function Index() {
                       <ul className="mt-2 grid gap-0.5">
                         {group.links.map((link) => (
                           <li key={link.label}>
-                            <a href={link.href} onClick={() => setMoreOpen(false)} className="flex min-h-10 items-center text-[15px] text-foreground/85 hover:text-primary">{link.label}</a>
+                            <a href={link.href} onClick={() => setMoreOpen(false)} className="flex min-h-10 items-center text-[15px] text-card-foreground/85 hover:text-primary">{link.label}</a>
                           </li>
                         ))}
                       </ul>
