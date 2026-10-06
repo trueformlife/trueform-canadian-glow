@@ -259,6 +259,38 @@ function Index() {
           </Button>
           <Button asChild className="h-12 shrink-0 px-4 sm:px-5"><a href={shopLinks.cart} aria-label="Cart"><ShoppingCart /><span className="hidden sm:inline">Cart</span></a></Button>
           <Button asChild className="h-12 shrink-0 px-4 sm:px-5"><a href={shopLinks.shop}>Shop</a></Button>
+          <div className="relative shrink-0" ref={moreRef}>
+            <Button
+              variant="outline"
+              aria-expanded={moreOpen}
+              aria-haspopup="true"
+              aria-label="More links"
+              onClick={() => setMoreOpen((open) => !open)}
+              className="h-12 w-12 px-0 sm:w-auto sm:px-4"
+            >
+              <Menu />
+              <span className="hidden sm:inline">More</span>
+              <ChevronDown className={`hidden transition-transform sm:inline ${moreOpen ? "rotate-180" : ""}`} />
+            </Button>
+            {moreOpen && (
+              <div className="absolute right-0 top-full z-50 mt-2 max-h-[75vh] w-[min(86vw,44rem)] overflow-y-auto rounded-lg border border-line bg-card p-5 text-card-foreground shadow-xl">
+                <div className="grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-3">
+                  {moreLinks.map((group) => (
+                    <div key={group.title}>
+                      <p className="text-sm font-bold uppercase tracking-wide text-primary">{group.title}</p>
+                      <ul className="mt-2 grid gap-0.5">
+                        {group.links.map((link) => (
+                          <li key={link.label}>
+                            <a href={link.href} onClick={() => setMoreOpen(false)} className="flex min-h-10 items-center text-[15px] text-foreground/85 hover:text-primary">{link.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
