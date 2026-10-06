@@ -256,7 +256,12 @@ function Index() {
             variant="outline"
             aria-expanded={mobileSearchOpen}
             aria-label="Search products"
-            onClick={() => setMobileSearchOpen((open) => !open)}
+            onClick={() =>
+              setMobileSearchOpen((open) => {
+                if (open) setQuery("");
+                return !open;
+              })
+            }
             className={`h-12 w-12 shrink-0 px-0 sm:hidden ${searching ? "border-primary text-primary" : ""}`}
           >
             <Search />
