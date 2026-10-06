@@ -17,6 +17,7 @@ import {
   Sparkles,
   Star,
   TestTube2,
+  UserRound,
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -216,7 +217,13 @@ function Index() {
               className="h-12 w-full rounded-lg border-2 border-line bg-card pl-10 pr-3 text-base text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
             />
           </div>
-          <Button asChild className="shrink-0 px-5"><a href={shopLinks.shop}>Shop</a></Button>
+          <Button asChild variant="outline" className="h-12 w-12 shrink-0 px-0 sm:w-auto sm:px-4">
+            <a href={shopLinks.account} aria-label="My Account">
+              <UserRound />
+              <span className="hidden sm:inline">My Account</span>
+            </a>
+          </Button>
+          <Button asChild className="h-12 shrink-0 px-4 sm:px-5"><a href={shopLinks.shop}>Shop</a></Button>
         </div>
       </header>
 
