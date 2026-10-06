@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { getRecommendations } from "@/lib/recommend.functions";
 import { getLiveStore } from "@/lib/store.functions";
 import {
@@ -106,8 +106,13 @@ function ProductVisual({ name, image, compact = false }: { name: string; image: 
   );
 }
 
-function ProductCard({ product, compact = false }: { product: Product | undefined; compact?: boolean }) {
-  if (!product) return null;
+const LivePrices = createContext<Record<string, string>>({});
+const slugOf = (href: string) => href.match(/\/product\/([^/?#]+)/)?.[1] ?? "";
+
+function ProductCard({ product: base, compact = false }: { product: Product | undefined; compact?: boolean }) {
+  const livePrices = useContext(LivePrices);
+  if (!base) return null;
+  const product = { ...base, price: livePrices[slugOf(base.href)] ?? base.price };
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-lg bg-card text-card-foreground shadow-xl">
@@ -182,6 +187,11 @@ function AiPicks({ goalTitle }: { goalTitle: string }) {
 }
 
 function Index() {
+  const live = Route.useLoaderData();
+  const featuredMatch = live.featured ? Object.values(products).find((x) => slugOf(x.href) === live.featured!.slug) : undefined;
+  const featuredProduct: Product | null = live.featured
+    ? { name: featuredMatch?.name ?? live.featured.name, why: featuredMatch?.why ?? "This month's pick, 20% off.", price: live.featured.price, href: featuredMatch?.href ?? live.featured.href, image: featuredMatch?.image ?? (live.featured.image ? { url: live.featured.image } : undefined) }
+    : null;
   const [query, setQuery] = useState("");
   const [selectedGoalId, setSelectedGoalId] = useState(goals[0].id);
   const searchInputRef = useRef<HTMLInputElement>(null);
