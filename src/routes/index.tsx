@@ -6,11 +6,13 @@ import { getLiveStore } from "@/lib/store.functions";
 import {
   ArrowRight,
   Brain,
+  ChevronDown,
   Dumbbell,
   HeartPulse,
   Leaf,
   Loader2,
   MapPin,
+  Menu,
   Moon,
   PackageCheck,
   Search,
@@ -23,7 +25,7 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { shopLinks } from "@/config/shopLinks";
+import { moreLinks, shopLinks } from "@/config/shopLinks";
 import heroImage from "@/assets/tfl-hero.jpg";
 import drewDorothyImage from "@/assets/drew-dorothy.jpg.asset.json";
 import logoImage from "@/assets/tfl-logo.png";
