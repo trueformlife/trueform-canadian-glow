@@ -197,6 +197,7 @@ function Index() {
   const [query, setQuery] = useState("");
   const [selectedGoalId, setSelectedGoalId] = useState(goals[0].id);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const normalizedQuery = query.trim().toLowerCase();
@@ -239,7 +240,7 @@ function Index() {
       <header className="sticky top-0 z-50 border-b border-line bg-background/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:h-20 sm:gap-4 sm:px-6">
           <img src={logoImage} alt="True Form Life" width={512} height={438} className="h-12 w-auto shrink-0 sm:h-14" />
-          <div className="relative min-w-0 flex-1">
+          <div className="relative hidden min-w-0 flex-1 sm:block">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <input
               ref={searchInputRef}
@@ -251,6 +252,20 @@ function Index() {
               className="h-12 w-full rounded-lg border-2 border-line bg-card pl-10 pr-3 text-base text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
             />
           </div>
+          <Button
+            variant="outline"
+            aria-expanded={mobileSearchOpen}
+            aria-label="Search products"
+            onClick={() =>
+              setMobileSearchOpen((open) => {
+                if (open) setQuery("");
+                return !open;
+              })
+            }
+            className={`h-12 w-12 shrink-0 px-0 sm:hidden ${searching ? "border-primary text-primary" : ""}`}
+          >
+            <Search />
+          </Button>
           <Button asChild variant="outline" className="h-12 w-12 shrink-0 px-0 sm:w-auto sm:px-4">
             <a href={shopLinks.account} aria-label="My Account">
               <UserRound />
@@ -291,8 +306,24 @@ function Index() {
               </div>
             )}
           </div>
-        </div>
-      </header>
+          </div>
+          {mobileSearchOpen && (
+            <div className="border-t border-line bg-background px-4 py-3 sm:hidden">
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  autoFocus
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search products…"
+                  aria-label="Search products"
+                  className="h-12 w-full rounded-lg border-2 border-line bg-card pl-10 pr-3 text-base text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+                />
+              </div>
+            </div>
+          )}
+        </header>
 
       <section aria-label="Why True Form Life" className="border-b border-line bg-surface">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-line sm:grid-cols-4">
