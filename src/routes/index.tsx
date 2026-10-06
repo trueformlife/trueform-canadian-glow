@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import { getRecommendations } from "@/lib/recommend.functions";
+import { getLiveStore } from "@/lib/store.functions";
 import {
   ArrowRight,
   Brain,
@@ -53,6 +54,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  loader: () => getLiveStore(),
   component: Index,
 });
 
@@ -297,14 +299,16 @@ function Index() {
         </section>
       )}
 
-      <section className="px-4 py-16 sm:px-6 sm:py-24">
-        <div className="mx-auto max-w-7xl">
-          <SectionTitle kicker="Featured this month">20% off Brain Fuel MCT Oil</SectionTitle>
-          <div className="mx-auto max-w-md sm:max-w-sm">
-            <ProductCard product={{ ...products["brainFuel"]!, badge: "Save" }} />
+      {featuredProduct && (
+        <section className="px-4 py-16 sm:px-6 sm:py-24">
+          <div className="mx-auto max-w-7xl">
+            <SectionTitle kicker="Featured this month">20% off {featuredProduct.name}</SectionTitle>
+            <div className="mx-auto max-w-md sm:max-w-sm">
+              <ProductCard product={{ ...featuredProduct, badge: "Save" }} />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="bg-secondary px-4 py-16 text-secondary-foreground sm:px-6 sm:py-24">
         <div className="mx-auto max-w-7xl">
