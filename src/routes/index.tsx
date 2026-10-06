@@ -14,6 +14,7 @@ import {
   PackageCheck,
   Search,
   ShieldCheck,
+  ShoppingCart,
   Sparkles,
   Star,
   TestTube2,
