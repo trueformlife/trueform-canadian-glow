@@ -6,11 +6,13 @@ import { getLiveStore } from "@/lib/store.functions";
 import {
   ArrowRight,
   Brain,
+  ChevronDown,
   Dumbbell,
   HeartPulse,
   Leaf,
   Loader2,
   MapPin,
+  Menu,
   Moon,
   PackageCheck,
   Search,
@@ -23,7 +25,7 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { shopLinks } from "@/config/shopLinks";
+import { moreLinks, shopLinks } from "@/config/shopLinks";
 import heroImage from "@/assets/tfl-hero.jpg";
 import drewDorothyImage from "@/assets/drew-dorothy.jpg.asset.json";
 import logoImage from "@/assets/tfl-logo.png";
@@ -194,6 +196,8 @@ function Index() {
     : null;
   const [query, setQuery] = useState("");
   const [selectedGoalId, setSelectedGoalId] = useState(goals[0].id);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const normalizedQuery = query.trim().toLowerCase();
   const searching = normalizedQuery.length > 0;
@@ -209,6 +213,22 @@ function Index() {
       document.getElementById("search-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }, [searching, normalizedQuery]);
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) setMoreOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMoreOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [moreOpen]);
 
   return (
     <LivePrices.Provider value={live.prices}>
@@ -239,6 +259,38 @@ function Index() {
           </Button>
           <Button asChild className="h-12 shrink-0 px-4 sm:px-5"><a href={shopLinks.cart} aria-label="Cart"><ShoppingCart /><span className="hidden sm:inline">Cart</span></a></Button>
           <Button asChild className="h-12 shrink-0 px-4 sm:px-5"><a href={shopLinks.shop}>Shop</a></Button>
+          <div className="relative shrink-0" ref={moreRef}>
+            <Button
+              variant="outline"
+              aria-expanded={moreOpen}
+              aria-haspopup="true"
+              aria-label="More links"
+              onClick={() => setMoreOpen((open) => !open)}
+              className="h-12 w-12 px-0 sm:w-auto sm:px-4"
+            >
+              <Menu />
+              <span className="hidden sm:inline">More</span>
+              <ChevronDown className={`hidden transition-transform sm:inline ${moreOpen ? "rotate-180" : ""}`} />
+            </Button>
+            {moreOpen && (
+              <div className="absolute right-0 top-full z-50 mt-2 max-h-[75vh] w-[min(86vw,44rem)] overflow-y-auto rounded-lg border border-line bg-card p-5 text-card-foreground shadow-xl">
+                <div className="grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-3">
+                  {moreLinks.map((group) => (
+                    <div key={group.title}>
+                      <p className="text-sm font-bold uppercase tracking-wide text-primary">{group.title}</p>
+                      <ul className="mt-2 grid gap-0.5">
+                        {group.links.map((link) => (
+                          <li key={link.label}>
+                            <a href={link.href} onClick={() => setMoreOpen(false)} className="flex min-h-10 items-center text-[15px] text-card-foreground/85 hover:text-primary">{link.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -358,7 +410,43 @@ function Index() {
       </section>
 
       <footer className="border-t border-line bg-background px-4 py-10 sm:px-6">
-        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-end"><div><img src={logoImage} alt="True Form Life" width={1024} height={102} loading="lazy" className="h-auto w-56" /><p className="mt-4 flex items-center gap-2 font-bold"><ShieldCheck className="text-primary" /> Proudly Canadian</p></div><nav aria-label="Footer" className="grid gap-1 text-lg"><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shop}>Shop</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shippingReturns}>Shipping & returns</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.contact}>Contact</a><a className="flex min-h-12 items-center hover:text-primary" href="https://us.trueformlife.com/">Visit our US website</a></nav></div>
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-end"><div><img src={logoImage} alt="True Form Life" width={1024} height={102} loading="lazy" className="h-auto w-56" /><p className="mt-4 flex items-center gap-2 font-bold"><ShieldCheck className="text-primary" /> Proudly Canadian</p></div><nav aria-label="Footer" className="grid gap-1 text-lg"><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shop}>Shop</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shippingReturns}>Shipping & returns</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.contact}>Contact</a><a className="flex min-h-12 items-center hover:text-primary" href="https://us.trueformlife.com/">Visit our US website</a></nav></div>
+          <div className="mt-10 border-t border-line pt-8">
+            <p className="text-sm font-bold uppercase tracking-wide text-primary">More from True Form</p>
+            <div className="mt-2 sm:hidden">
+              {moreLinks.map((group) => (
+                <details key={group.title} className="group border-b border-line">
+                  <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between font-bold [&::-webkit-details-marker]:hidden">
+                    {group.title}
+                    <ChevronDown className="transition-transform group-open:rotate-180" />
+                  </summary>
+                  <ul className="grid gap-0.5 pb-3">
+                    {group.links.map((link) => (
+                      <li key={link.label}>
+                        <a href={link.href} className="flex min-h-11 items-center text-foreground/85">{link.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ))}
+            </div>
+            <div className="mt-4 hidden gap-8 sm:grid sm:grid-cols-3 lg:grid-cols-5">
+              {moreLinks.map((group) => (
+                <div key={group.title}>
+                  <p className="font-bold">{group.title}</p>
+                  <ul className="mt-2 grid gap-0.5">
+                    {group.links.map((link) => (
+                      <li key={link.label}>
+                        <a href={link.href} className="flex min-h-9 items-center text-foreground/85 hover:text-primary">{link.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </footer>
     </main>
     </LivePrices.Provider>
