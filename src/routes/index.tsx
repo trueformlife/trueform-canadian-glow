@@ -211,6 +211,7 @@ function Index() {
   }, [searching, normalizedQuery]);
 
   return (
+    <LivePrices.Provider value={live.prices}>
     <main className="overflow-hidden bg-background text-foreground">
       <div className="bg-surface-strong px-3 py-2 text-center text-sm font-semibold sm:text-base">
         Free shipping across Canada on orders over <strong className="text-accent">$200</strong>. Canadian owned.
@@ -360,5 +361,6 @@ function Index() {
         <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-end"><div><img src={logoImage} alt="True Form Life" width={1024} height={102} loading="lazy" className="h-auto w-56" /><p className="mt-4 flex items-center gap-2 font-bold"><ShieldCheck className="text-primary" /> Proudly Canadian</p></div><nav aria-label="Footer" className="grid gap-1 text-lg"><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shop}>Shop</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shippingReturns}>Shipping & returns</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.contact}>Contact</a><a className="flex min-h-12 items-center hover:text-primary" href="https://us.trueformlife.com/">Visit our US website</a></nav></div>
       </footer>
     </main>
+    </LivePrices.Provider>
   );
 }
