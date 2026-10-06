@@ -410,7 +410,43 @@ function Index() {
       </section>
 
       <footer className="border-t border-line bg-background px-4 py-10 sm:px-6">
-        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-[1fr_auto] sm:items-end"><div><img src={logoImage} alt="True Form Life" width={1024} height={102} loading="lazy" className="h-auto w-56" /><p className="mt-4 flex items-center gap-2 font-bold"><ShieldCheck className="text-primary" /> Proudly Canadian</p></div><nav aria-label="Footer" className="grid gap-1 text-lg"><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shop}>Shop</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shippingReturns}>Shipping & returns</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.contact}>Contact</a><a className="flex min-h-12 items-center hover:text-primary" href="https://us.trueformlife.com/">Visit our US website</a></nav></div>
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-end"><div><img src={logoImage} alt="True Form Life" width={1024} height={102} loading="lazy" className="h-auto w-56" /><p className="mt-4 flex items-center gap-2 font-bold"><ShieldCheck className="text-primary" /> Proudly Canadian</p></div><nav aria-label="Footer" className="grid gap-1 text-lg"><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shop}>Shop</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.shippingReturns}>Shipping & returns</a><a className="flex min-h-12 items-center hover:text-primary" href={shopLinks.contact}>Contact</a><a className="flex min-h-12 items-center hover:text-primary" href="https://us.trueformlife.com/">Visit our US website</a></nav></div>
+          <div className="mt-10 border-t border-line pt-8">
+            <p className="text-sm font-bold uppercase tracking-wide text-primary">More from True Form</p>
+            <div className="mt-2 sm:hidden">
+              {moreLinks.map((group) => (
+                <details key={group.title} className="group border-b border-line">
+                  <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between font-bold [&::-webkit-details-marker]:hidden">
+                    {group.title}
+                    <ChevronDown className="transition-transform group-open:rotate-180" />
+                  </summary>
+                  <ul className="grid gap-0.5 pb-3">
+                    {group.links.map((link) => (
+                      <li key={link.label}>
+                        <a href={link.href} className="flex min-h-11 items-center text-foreground/85">{link.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ))}
+            </div>
+            <div className="mt-4 hidden gap-8 sm:grid sm:grid-cols-3 lg:grid-cols-5">
+              {moreLinks.map((group) => (
+                <div key={group.title}>
+                  <p className="font-bold">{group.title}</p>
+                  <ul className="mt-2 grid gap-0.5">
+                    {group.links.map((link) => (
+                      <li key={link.label}>
+                        <a href={link.href} className="flex min-h-9 items-center text-foreground/85 hover:text-primary">{link.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </footer>
     </main>
     </LivePrices.Provider>
