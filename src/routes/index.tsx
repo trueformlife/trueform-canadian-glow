@@ -223,6 +223,7 @@ function Index() {
               <span className="hidden sm:inline">My Account</span>
             </a>
           </Button>
+          <Button asChild className="h-12 shrink-0 px-4 sm:px-5"><a href={shopLinks.cart} aria-label="Cart"><ShoppingCart /><span className="hidden sm:inline">Cart</span></a></Button>
           <Button asChild className="h-12 shrink-0 px-4 sm:px-5"><a href={shopLinks.shop}>Shop</a></Button>
         </div>
       </header>
