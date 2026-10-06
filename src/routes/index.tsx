@@ -196,6 +196,8 @@ function Index() {
     : null;
   const [query, setQuery] = useState("");
   const [selectedGoalId, setSelectedGoalId] = useState(goals[0].id);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const normalizedQuery = query.trim().toLowerCase();
   const searching = normalizedQuery.length > 0;
@@ -211,6 +213,22 @@ function Index() {
       document.getElementById("search-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }, [searching, normalizedQuery]);
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) setMoreOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMoreOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [moreOpen]);
 
   return (
     <LivePrices.Provider value={live.prices}>
