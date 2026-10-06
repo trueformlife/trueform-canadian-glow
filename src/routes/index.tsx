@@ -238,8 +238,8 @@ function Index() {
         Free shipping across Canada on orders over <strong className="text-accent">$200</strong>. Canadian owned.
       </div>
       <header className="sticky top-0 z-50 border-b border-line bg-background/95 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:h-20 sm:gap-4 sm:px-6">
-          <img src={logoImage} alt="True Form Life" width={512} height={438} className="h-12 w-auto shrink-0 sm:h-14" />
+        <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-3 sm:h-20 sm:gap-4 sm:px-6">
+          <img src={logoImage} alt="True Form Life" width={512} height={438} className="h-9 w-auto shrink-0 sm:h-14" />
           <div className="relative hidden min-w-0 flex-1 sm:block">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -262,18 +262,18 @@ function Index() {
                 return !open;
               })
             }
-            className={`h-12 w-12 shrink-0 px-0 sm:hidden ${searching ? "border-primary text-primary" : ""}`}
+            className={`h-10 w-10 shrink-0 px-0 sm:hidden ${searching ? "border-primary text-primary" : ""}`}
           >
             <Search />
           </Button>
-          <Button asChild variant="outline" className="h-12 w-12 shrink-0 px-0 sm:w-auto sm:px-4">
+          <Button asChild variant="outline" className="h-10 w-10 shrink-0 px-0 sm:h-12 sm:w-auto sm:px-4">
             <a href={shopLinks.account} aria-label="My Account">
               <UserRound />
               <span className="hidden sm:inline">My Account</span>
             </a>
           </Button>
-          <Button asChild className="h-12 shrink-0 px-4 sm:px-5"><a href={shopLinks.cart} aria-label="Cart"><ShoppingCart /><span className="hidden sm:inline">Cart</span></a></Button>
-          <Button asChild className="h-12 shrink-0 px-4 sm:px-5"><a href={shopLinks.shop}>Shop</a></Button>
+          <Button asChild className="h-10 shrink-0 px-3 sm:h-12 sm:px-5"><a href={shopLinks.cart} aria-label="Cart"><ShoppingCart /><span className="hidden sm:inline">Cart</span></a></Button>
+          <Button asChild className="h-10 shrink-0 px-3 sm:h-12 sm:px-5"><a href={shopLinks.shop}>Shop</a></Button>
           <div className="relative shrink-0" ref={moreRef}>
             <Button
               variant="outline"
@@ -281,7 +281,7 @@ function Index() {
               aria-haspopup="true"
               aria-label="More links"
               onClick={() => setMoreOpen((open) => !open)}
-              className="h-12 w-12 px-0 sm:w-auto sm:px-4"
+              className="h-10 w-10 px-0 sm:h-12 sm:w-auto sm:px-4"
             >
               <Menu />
               <span className="hidden sm:inline">More</span>
