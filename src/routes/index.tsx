@@ -341,7 +341,7 @@ function Index() {
               ["Moira Schrader","Once again, the product arrived within days, and it was all wrapped individually with bubble wrap and included a beautiful card that said how happy they were for my support. I love that they’re local, and the product is such great quality. I’m very much enjoying the Liquid magnesium and I know I’m going to love this mango, which is new to me!!"],
             ].map(([name, text]) => <article key={name} className="flex flex-col rounded-lg bg-card p-5 text-card-foreground shadow-lg"><div className="flex gap-1 text-accent" aria-label="5 out of 5 stars">{Array.from({length:5}).map((_,i) => <Star key={i} className="fill-current" />)}</div><p className="mt-5 text-muted-foreground">“{text}”</p><p className="mt-auto pt-6 font-display text-lg font-bold">{name}</p><p className="text-sm text-muted-foreground">Google review</p></article>)}
           </div>
-          <a href="https://www.google.com/maps/place/True+Form+Life/@42.8121133,-91.93059,4z/data=!4m8!3m7!1s0x4ca72317f225571f:0x34588989bc04f8be!8m2!3d42.8121133!4d-91.93059!9m1!1b1!16s%2Fg%2F11j1hwc5dn" className="mt-7 inline-flex min-h-12 items-center gap-2 font-bold text-royal underline underline-offset-4">Read our Google reviews <ArrowRight /></a>
+          <a href="https://www.google.com/maps/place/True+Form+Life/@42.8121133,-91.93059,4z/data=!4m8!3m7!1s0x4ca72317f225571f:0x34588989bc04f8be!8m2!3d42.8121133!4d-91.93059!9m1!1b1!16s%2Fg%2F11j1hwc5dn" target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex min-h-12 items-center gap-2 font-bold text-royal underline underline-offset-4">Read our Google reviews <ArrowRight /></a>
         </div>
       </section>
 
