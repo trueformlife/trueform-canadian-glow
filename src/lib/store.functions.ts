@@ -45,7 +45,7 @@ export const getLiveStore = createServerFn({ method: "GET" }).handler(async (): 
           slug,
           name: item.name.replace(/&#8217;/g, "’").replace(/&amp;/g, "&"),
           price: sale,
-          regularPrice: regular && Number(regular) > Number(sale) ? regular : (Number(sale) / 0.8).toFixed(2),
+          regularPrice: regular && Number(regular) > Number(sale) ? regular : null,
           image: item.images[0]?.src ?? null,
           href: item.permalink,
         };
