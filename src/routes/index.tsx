@@ -58,7 +58,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Product = { name: string; price: string; why: string; href: string; badge?: "New" | "Save"; image?: { url: string } };
+type Product = { name: string; price: string; why: string; href: string; badge?: "New" | "Save"; image?: { url: string } | undefined };
 type Goal = { id: string; title: string; productIds: string[]; icon: typeof Moon };
 
 const p = shopLinks.products;
