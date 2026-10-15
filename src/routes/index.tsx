@@ -25,7 +25,7 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { moreLinks, shopLinks } from "@/config/shopLinks";
+import { moreLinks, shopLinks, STORE_BASE_URL } from "@/config/shopLinks";
 import heroImage from "@/assets/tfl-hero.jpg";
 import drewDorothyImage from "@/assets/drew-dorothy.jpg.asset.json";
 import logoImage from "@/assets/tfl-logo.png";
@@ -129,6 +129,44 @@ function ProductCard({ product: base, compact = false }: { product: Product | un
         </Button>
       </div>
     </article>
+  );
+}
+
+function SearchDropdown({ ids, query, onClose }: { ids: string[]; query: string; onClose: () => void }) {
+  const livePrices = useContext(LivePrices);
+  const storeSearch = `${STORE_BASE_URL}/?s=${encodeURIComponent(query.trim())}&post_type=product`;
+  return (
+    <div className="absolute inset-x-0 top-full z-40 px-3 pt-2 sm:px-6">
+      <div className="mx-auto max-h-[70vh] max-w-3xl overflow-y-auto rounded-lg border border-line bg-card p-2 text-card-foreground shadow-2xl">
+        {ids.length > 0 ? (
+          <ul className="grid gap-1" aria-label="Search results">
+            {ids.map((id) => {
+              const p = products[id];
+              const price = livePrices[slugOf(p.href)] ?? p.price;
+              return (
+                <li key={id}>
+                  <a href={p.href} onClick={onClose} className="flex min-h-16 items-center gap-3 rounded-md p-2 hover:bg-secondary focus:bg-secondary focus:outline-none">
+                    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md bg-secondary">
+                      {p.image?.url && <img src={p.image.url} alt="" loading="lazy" className="h-12 w-12 object-contain" />}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-bold leading-tight">{p.name}</span>
+                      <span className="block truncate text-sm text-muted-foreground">{p.why}</span>
+                    </span>
+                    <span className="shrink-0 font-display font-bold text-royal">${price}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="px-3 py-4 text-base text-muted-foreground">No products found for “{query}”.</p>
+        )}
+        <a href={storeSearch} className="mt-1 flex min-h-12 items-center justify-center gap-2 rounded-md border-t border-line px-3 text-base font-bold text-primary">
+          Search the full store for “{query.trim()}” <ArrowRight className="h-4 w-4" />
+        </a>
+      </div>
+    </div>
   );
 }
 
