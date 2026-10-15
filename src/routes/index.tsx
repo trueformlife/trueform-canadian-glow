@@ -207,13 +207,6 @@ function Index() {
     .filter(([, product]) => product.name.toLowerCase().includes(normalizedQuery) || product.why.toLowerCase().includes(normalizedQuery))
     .map(([id]) => id);
 
-  useEffect(() => {
-    if (!searching) return;
-
-    requestAnimationFrame(() => {
-      document.getElementById("search-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-  }, [searching, normalizedQuery]);
 
   useEffect(() => {
     if (!moreOpen) return;
@@ -256,12 +249,10 @@ function Index() {
             variant="outline"
             aria-expanded={mobileSearchOpen}
             aria-label="Search products"
-            onClick={() =>
-              setMobileSearchOpen((open) => {
-                if (open) setQuery("");
-                return !open;
-              })
-            }
+            onClick={() => {
+              if (mobileSearchOpen) setQuery("");
+              setMobileSearchOpen(!mobileSearchOpen);
+            }}
             className={`h-10 w-10 shrink-0 px-0 sm:hidden ${searching ? "border-primary text-primary" : ""}`}
           >
             <Search />
@@ -280,7 +271,7 @@ function Index() {
               aria-expanded={moreOpen}
               aria-haspopup="true"
               aria-label="More links"
-              onClick={() => setMoreOpen((open) => !open)}
+              onClick={() => setMoreOpen(!moreOpen)}
               className="h-10 w-10 px-0 sm:h-12 sm:w-auto sm:px-4"
             >
               <Menu />
