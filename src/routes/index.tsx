@@ -262,6 +262,22 @@ function Index() {
     };
   }, [moreOpen]);
 
+  useEffect(() => {
+    if (!searching) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) setQuery("");
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setQuery("");
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [searching]);
+
   return (
     <LivePrices.Provider value={live.prices}>
     <main className="overflow-hidden bg-background text-foreground">
@@ -352,6 +368,16 @@ function Index() {
               </div>
             </div>
           )}
+          {searching && (
+            <SearchDropdown
+              ids={searchResults}
+              query={query}
+              onClose={() => {
+                setQuery("");
+                setMobileSearchOpen(false);
+              }}
+            />
+          )}
         </header>
 
       <section aria-label="Why True Form Life" className="border-b border-line bg-surface">
@@ -411,16 +437,6 @@ function Index() {
       </section>
 
 
-      {searching && (
-        <section id="search-results" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle kicker="Find your fit">Search results</SectionTitle>
-            <div className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
-              {searchResults.length > 0 ? searchResults.map((id) => <ProductCard key={id} product={products[id]} compact />) : <p className="col-span-full py-6 text-center text-lg text-muted-foreground">No products found for “{query}”. Try another search.</p>}
-            </div>
-          </div>
-        </section>
-      )}
 
       {featuredProduct && (
         <section className="px-4 py-16 sm:px-6 sm:py-24">
