@@ -207,13 +207,19 @@ function Index() {
     .filter(([, product]) => product.name.toLowerCase().includes(normalizedQuery) || product.why.toLowerCase().includes(normalizedQuery))
     .map(([id]) => id);
 
+  const hasScrolledToResults = useRef(false);
   useEffect(() => {
-    if (!searching) return;
+    if (!searching) {
+      hasScrolledToResults.current = false;
+      return;
+    }
+    if (hasScrolledToResults.current) return;
+    hasScrolledToResults.current = true;
 
     requestAnimationFrame(() => {
       document.getElementById("search-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-  }, [searching, normalizedQuery]);
+  }, [searching]);
 
   useEffect(() => {
     if (!moreOpen) return;
