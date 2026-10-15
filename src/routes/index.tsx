@@ -43,7 +43,7 @@ import magteinImage from "@/assets/product-images/magtein.jpg.asset.json";
 import spirulinaImage from "@/assets/product-images/spirulina.jpg.asset.json";
 import turmericImage from "@/assets/product-images/turmeric.png.asset.json";
 import vanillaProteinImage from "@/assets/product-images/vanilla-protein.png.asset.json";
-import pumpkinBookImage from "@/assets/pumpkin-recipes-3d-book.png.asset.json";
+import pumpkinBookImage from "@/assets/pumpkin-recipes-3d-book-cropped.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -437,7 +437,7 @@ function Index() {
 
       <section className="bg-royal px-4 py-16 text-center text-royal-foreground sm:px-6 sm:py-20">
 
-        <div className="mx-auto max-w-3xl"><Brain className="mx-auto h-10 w-10 text-primary" /><h2 className="mt-4 text-3xl font-bold sm:text-5xl">Join other women 40+ in True Form's Ageless Energy</h2><Button asChild variant="accent" size="lg" className="mt-7 w-full sm:w-auto"><a href="https://www.facebook.com/groups/tfagelessenergy">Join the Ageless Energy group <ArrowRight /></a></Button><a href="https://go.trueformlife.com/pumpkin-recipes-ebook" className="mx-auto mt-5 flex min-h-12 items-center justify-center font-bold underline underline-offset-4">Free ebook: 10 Quick Healthy Pumpkin Recipes</a><a href="https://go.trueformlife.com/pumpkin-recipes-ebook" aria-label="Free ebook: 10 Quick Healthy Pumpkin Recipes" className="mx-auto mt-3 block w-fit max-w-full"><img src={pumpkinBookImage.url} alt="10 Quick Healthy Pumpkin Recipes ebook" loading="lazy" className="w-96 max-w-full sm:w-[32rem]" /></a></div>
+        <div className="mx-auto max-w-3xl"><Brain className="mx-auto h-10 w-10 text-primary" /><h2 className="mt-4 text-3xl font-bold sm:text-5xl">Join other women 40+ in True Form's Ageless Energy</h2><Button asChild variant="accent" size="lg" className="mt-7 w-full sm:w-auto"><a href="https://www.facebook.com/groups/tfagelessenergy">Join the Ageless Energy group <ArrowRight /></a></Button><a href="https://go.trueformlife.com/pumpkin-recipes-ebook" className="mx-auto mt-5 flex min-h-12 items-center justify-center font-bold underline underline-offset-4">Free ebook: 10 Quick Healthy Pumpkin Recipes</a><a href="https://go.trueformlife.com/pumpkin-recipes-ebook" aria-label="Free ebook: 10 Quick Healthy Pumpkin Recipes" className="mx-auto mt-3 block w-fit max-w-full"><img src={pumpkinBookImage} alt="10 Quick Healthy Pumpkin Recipes ebook" loading="lazy" className="w-[19rem] max-w-full sm:w-96" /></a></div>
       </section>
 
       <footer className="border-t border-line bg-background px-4 py-10 sm:px-6">
