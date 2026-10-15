@@ -142,6 +142,7 @@ function SearchDropdown({ ids, query, onClose }: { ids: string[]; query: string;
           <ul className="grid gap-1" aria-label="Search results">
             {ids.map((id) => {
               const p = products[id];
+              if (!p) return null;
               const price = livePrices[slugOf(p.href)] ?? p.price;
               return (
                 <li key={id}>
@@ -238,6 +239,7 @@ function Index() {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
   const normalizedQuery = query.trim().toLowerCase();
   const searching = normalizedQuery.length > 0;
   const selectedGoal = goals.find((goal) => goal.id === selectedGoalId) ?? goals[0];
@@ -284,7 +286,7 @@ function Index() {
       <div className="bg-surface-strong px-3 py-2 text-center text-sm font-semibold sm:text-base">
         Free shipping across Canada on orders over <strong className="text-accent">$200</strong>. Canadian owned.
       </div>
-      <header className="sticky top-0 z-50 border-b border-line bg-background/95 backdrop-blur">
+      <header ref={headerRef} className="sticky top-0 z-50 border-b border-line bg-background/95 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-3 sm:h-20 sm:gap-4 sm:px-6">
           <img src={logoImage} alt="True Form Life" width={512} height={438} className="h-9 w-auto shrink-0 sm:h-14" />
           <div className="relative hidden min-w-0 flex-1 sm:block">
