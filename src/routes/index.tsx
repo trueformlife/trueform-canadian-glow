@@ -152,7 +152,7 @@ function SearchDropdown({ ids, query, onClose }: { ids: string[]; query: string;
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block font-bold leading-tight">{p.name}</span>
-                      <span className="block truncate text-sm text-muted-foreground">{p.why}</span>
+                      <span className="hidden truncate text-sm text-muted-foreground sm:block">{p.why}</span>
                     </span>
                     <span className="shrink-0 font-display font-bold text-royal">${price}</span>
                   </a>
