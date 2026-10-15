@@ -25,7 +25,7 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { moreLinks, shopLinks } from "@/config/shopLinks";
+import { moreLinks, shopLinks, STORE_BASE_URL } from "@/config/shopLinks";
 import heroImage from "@/assets/tfl-hero.jpg";
 import drewDorothyImage from "@/assets/drew-dorothy.jpg.asset.json";
 import logoImage from "@/assets/tfl-logo.png";
@@ -132,6 +132,45 @@ function ProductCard({ product: base, compact = false }: { product: Product | un
   );
 }
 
+function SearchDropdown({ ids, query, onClose }: { ids: string[]; query: string; onClose: () => void }) {
+  const livePrices = useContext(LivePrices);
+  const storeSearch = `${STORE_BASE_URL}/?s=${encodeURIComponent(query.trim())}&post_type=product`;
+  return (
+    <div className="absolute inset-x-0 top-full z-40 px-3 pt-2 sm:px-6">
+      <div className="mx-auto max-h-[70vh] max-w-3xl overflow-y-auto rounded-lg border border-line bg-card p-2 text-card-foreground shadow-2xl">
+        {ids.length > 0 ? (
+          <ul className="grid grid-cols-1 gap-1" aria-label="Search results">
+            {ids.map((id) => {
+              const p = products[id];
+              if (!p) return null;
+              const price = livePrices[slugOf(p.href)] ?? p.price;
+              return (
+                <li key={id} className="min-w-0">
+                  <a href={p.href} onClick={onClose} className="flex min-h-16 items-center gap-3 rounded-md p-2 hover:bg-secondary focus:bg-secondary focus:outline-none">
+                    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md bg-secondary">
+                      {p.image?.url && <img src={p.image.url} alt="" loading="lazy" className="h-12 w-12 object-contain" />}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-bold leading-tight">{p.name}</span>
+                      <span className="hidden truncate text-sm text-muted-foreground sm:block">{p.why}</span>
+                    </span>
+                    <span className="shrink-0 font-display font-bold text-royal">${price}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="px-3 py-4 text-base text-muted-foreground">No products found for “{query}”.</p>
+        )}
+        <a href={storeSearch} className="mt-1 flex min-h-12 items-center justify-center gap-2 rounded-md border-t border-line px-3 text-base font-bold text-primary">
+          Search the full store for “{query.trim()}” <ArrowRight className="h-4 w-4" />
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function SectionTitle({ kicker, children }: { kicker?: string; children: React.ReactNode }) {
   return <div className="mb-6"><p className="font-bold uppercase text-primary">{kicker}</p><h2 className="mt-1 text-3xl font-bold leading-tight sm:text-4xl">{children}</h2></div>;
 }
@@ -200,6 +239,7 @@ function Index() {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
   const normalizedQuery = query.trim().toLowerCase();
   const searching = normalizedQuery.length > 0;
   const selectedGoal = goals.find((goal) => goal.id === selectedGoalId) ?? goals[0];
@@ -224,13 +264,29 @@ function Index() {
     };
   }, [moreOpen]);
 
+  useEffect(() => {
+    if (!searching) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) setQuery("");
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setQuery("");
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [searching]);
+
   return (
     <LivePrices.Provider value={live.prices}>
     <main className="overflow-hidden bg-background text-foreground">
       <div className="bg-surface-strong px-3 py-2 text-center text-sm font-semibold sm:text-base">
         Free shipping across Canada on orders over <strong className="text-accent">$200</strong>. Canadian owned.
       </div>
-      <header className="sticky top-0 z-50 border-b border-line bg-background/95 backdrop-blur">
+      <header ref={headerRef} className="sticky top-0 z-50 border-b border-line bg-background/95 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-3 sm:h-20 sm:gap-4 sm:px-6">
           <img src={logoImage} alt="True Form Life" width={512} height={438} className="h-9 w-auto shrink-0 sm:h-14" />
           <div className="relative hidden min-w-0 flex-1 sm:block">
@@ -314,6 +370,16 @@ function Index() {
               </div>
             </div>
           )}
+          {searching && (
+            <SearchDropdown
+              ids={searchResults}
+              query={query}
+              onClose={() => {
+                setQuery("");
+                setMobileSearchOpen(false);
+              }}
+            />
+          )}
         </header>
 
       <section aria-label="Why True Form Life" className="border-b border-line bg-surface">
@@ -373,16 +439,6 @@ function Index() {
       </section>
 
 
-      {searching && (
-        <section id="search-results" className="scroll-mt-24 px-4 py-16 sm:px-6 sm:py-24">
-          <div className="mx-auto max-w-7xl">
-            <SectionTitle kicker="Find your fit">Search results</SectionTitle>
-            <div className="mt-7 grid animate-in fade-in slide-in-from-bottom-3 gap-4 duration-300 sm:grid-cols-2 lg:grid-cols-3">
-              {searchResults.length > 0 ? searchResults.map((id) => <ProductCard key={id} product={products[id]} compact />) : <p className="col-span-full py-6 text-center text-lg text-muted-foreground">No products found for “{query}”. Try another search.</p>}
-            </div>
-          </div>
-        </section>
-      )}
 
       {featuredProduct && (
         <section className="px-4 py-16 sm:px-6 sm:py-24">
