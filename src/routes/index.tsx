@@ -139,13 +139,13 @@ function SearchDropdown({ ids, query, onClose }: { ids: string[]; query: string;
     <div className="absolute inset-x-0 top-full z-40 px-3 pt-2 sm:px-6">
       <div className="mx-auto max-h-[70vh] max-w-3xl overflow-y-auto rounded-lg border border-line bg-card p-2 text-card-foreground shadow-2xl">
         {ids.length > 0 ? (
-          <ul className="grid gap-1" aria-label="Search results">
+          <ul className="grid grid-cols-1 gap-1" aria-label="Search results">
             {ids.map((id) => {
               const p = products[id];
               if (!p) return null;
               const price = livePrices[slugOf(p.href)] ?? p.price;
               return (
-                <li key={id}>
+                <li key={id} className="min-w-0">
                   <a href={p.href} onClick={onClose} className="flex min-h-16 items-center gap-3 rounded-md p-2 hover:bg-secondary focus:bg-secondary focus:outline-none">
                     <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md bg-secondary">
                       {p.image?.url && <img src={p.image.url} alt="" loading="lazy" className="h-12 w-12 object-contain" />}
