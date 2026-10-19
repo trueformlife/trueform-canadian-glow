@@ -49,7 +49,7 @@ export const getLiveStore = createServerFn({ method: "GET" }).handler(async (): 
             const ph = await pRes.text();
             const vm = ph.match(/data-product_variations="([^"]*)"/);
             if (vm) {
-              const json = vm[1].replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&");
+              const json = vm[1]!.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&");
               const vars = JSON.parse(json) as { display_price: number; display_regular_price: number }[];
               const best = vars.sort((a, b) => a.display_price - b.display_price)[0];
               if (best) {
@@ -59,8 +59,8 @@ export const getLiveStore = createServerFn({ method: "GET" }).handler(async (): 
             } else {
               const del = ph.match(/<del[^>]*>[\s\S]*?([\d,]+\.\d{2})[\s\S]*?<\/del>\s*<ins[^>]*>[\s\S]*?([\d,]+\.\d{2})/);
               if (del) {
-                regular = del[1].replace(/,/g, "");
-                sale = del[2].replace(/,/g, "");
+                regular = del[1]!.replace(/,/g, "");
+                sale = del[2]!.replace(/,/g, "");
               }
             }
           }
