@@ -111,10 +111,10 @@ function ProductVisual({ name, image, compact = false }: { name: string; image: 
 const LivePrices = createContext<Record<string, string>>({});
 const slugOf = (href: string) => href.match(/\/product\/([^/?#]+)/)?.[1] ?? "";
 
-function ProductCard({ product: base, compact = false }: { product: Product | undefined; compact?: boolean }) {
+function ProductCard({ product: base, compact = false, regularPrice }: { product: Product | undefined; compact?: boolean; regularPrice?: string | null }) {
   const livePrices = useContext(LivePrices);
   if (!base) return null;
-  const product = { ...base, price: livePrices[slugOf(base.href)] ?? base.price };
+  const product = regularPrice !== undefined ? base : { ...base, price: livePrices[slugOf(base.href)] ?? base.price };
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-lg bg-card text-card-foreground shadow-xl">
@@ -123,7 +123,10 @@ function ProductCard({ product: base, compact = false }: { product: Product | un
         {product.badge && <span className="mb-2 w-fit rounded bg-accent px-2.5 py-1 text-sm font-bold text-accent-foreground">{product.badge}</span>}
         <h3 className="text-xl font-bold leading-tight">{product.name}</h3>
         <p className="mt-1 text-base text-muted-foreground">{product.why}</p>
-        <p className="mt-3 font-display text-lg font-bold text-royal">from ${product.price} CAD</p>
+        <p className="mt-3 font-display text-lg font-bold text-royal">
+          from ${product.price} CAD
+          {regularPrice && <s className="ml-2 text-base font-normal text-muted-foreground">${regularPrice}</s>}
+        </p>
         <Button asChild className="mt-4 w-full">
           <a href={product.href}>Buy <ArrowRight /></a>
         </Button>
@@ -445,7 +448,7 @@ function Index() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle kicker="Featured this month">20% off {featuredProduct.name}</SectionTitle>
             <div className="mx-auto max-w-md sm:max-w-sm">
-              <ProductCard product={{ ...featuredProduct, badge: "Save" }} />
+              <ProductCard product={{ ...featuredProduct, badge: "Save" }} regularPrice={live.featured?.regularPrice ?? null} />
             </div>
           </div>
         </section>
