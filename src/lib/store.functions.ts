@@ -4,7 +4,7 @@ export type LiveFeatured = { slug: string; name: string; price: string; regularP
 export type LiveStore = { prices: Record<string, string>; featured: LiveFeatured | null };
 
 const BASE = "https://trueformlife.com";
-let cache: { at: number; data: LiveStore } | null = null;
+let cache: { at: number; data: LiveStore; v?: number } | null = null;
 
 const money = (cents: string | undefined) => (cents ? (Number(cents) / 100).toFixed(2) : null);
 
@@ -18,7 +18,7 @@ type StoreProduct = {
 
 // Reads live prices and the monthly featured product (first item on /shop/) from the public WooCommerce store.
 export const getLiveStore = createServerFn({ method: "GET" }).handler(async (): Promise<LiveStore> => {
-  if (cache && Date.now() - cache.at < 10 * 60 * 1000) return cache.data;
+  if (cache?.v === 2 && Date.now() - cache.at < 10 * 60 * 1000) return cache.data;
   try {
     const headers = { "User-Agent": "Mozilla/5.0 TrueFormHome" };
     const [apiRes, shopRes] = await Promise.all([
@@ -83,7 +83,7 @@ export const getLiveStore = createServerFn({ method: "GET" }).handler(async (): 
       }
     }
     const data = { prices, featured };
-    if (list.length) cache = { at: Date.now(), data };
+    if (list.length) cache = { at: Date.now(), data, v: 2 };
     return data;
   } catch (e) {
     console.error("Live store fetch failed", e);
