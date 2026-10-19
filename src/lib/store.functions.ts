@@ -67,7 +67,6 @@ export const getLiveStore = createServerFn({ method: "GET" }).handler(async (): 
         } catch (e) {
           console.error("Featured product page fetch failed", e);
         }
-        console.log("featured price", slug, sale, regular);
         if (!sale) {
           regular = regularFeed;
           sale = (Math.round(Number(regularFeed) * 80) / 100).toFixed(2);

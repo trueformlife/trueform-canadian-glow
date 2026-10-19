@@ -448,7 +448,7 @@ function Index() {
           <div className="mx-auto max-w-7xl">
             <SectionTitle kicker="Featured this month">20% off {featuredProduct.name}</SectionTitle>
             <div className="mx-auto max-w-md sm:max-w-sm">
-              <ProductCard product={{ ...featuredProduct, badge: "Save" }} />
+              <ProductCard product={{ ...featuredProduct, badge: "Save" }} regularPrice={live.featured?.regularPrice ?? null} />
             </div>
           </div>
         </section>
