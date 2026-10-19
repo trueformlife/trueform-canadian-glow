@@ -39,8 +39,38 @@ export const getLiveStore = createServerFn({ method: "GET" }).handler(async (): 
       const slug = m?.[1];
       const item = slug ? list.find((x) => x.slug === slug) : undefined;
       if (slug && item) {
-        const sale = money(item.prices.price_range?.min_amount ?? item.prices.price)!;
-        const regular = money(item.prices.regular_price);
+        const regularFeed = money(item.prices.price_range?.min_amount ?? item.prices.regular_price)!;
+        let sale: string | null = null;
+        let regular: string | null = null;
+        // Store API omits plugin-applied discounts; read the real prices from the product page.
+        try {
+          const pRes = await fetch(item.permalink, { headers });
+          if (pRes.ok) {
+            const ph = await pRes.text();
+            const vm = ph.match(/data-product_variations="([^"]*)"/);
+            if (vm) {
+              const json = vm[1].replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, "&");
+              const vars = JSON.parse(json) as { display_price: number; display_regular_price: number }[];
+              const best = vars.sort((a, b) => a.display_price - b.display_price)[0];
+              if (best) {
+                sale = best.display_price.toFixed(2);
+                regular = best.display_regular_price.toFixed(2);
+              }
+            } else {
+              const del = ph.match(/<del[^>]*>[\s\S]*?([\d,]+\.\d{2})[\s\S]*?<\/del>\s*<ins[^>]*>[\s\S]*?([\d,]+\.\d{2})/);
+              if (del) {
+                regular = del[1].replace(/,/g, "");
+                sale = del[2].replace(/,/g, "");
+              }
+            }
+          }
+        } catch (e) {
+          console.error("Featured product page fetch failed", e);
+        }
+        if (!sale) {
+          regular = regularFeed;
+          sale = (Math.round(Number(regularFeed) * 80) / 100).toFixed(2);
+        }
         featured = {
           slug,
           name: item.name.replace(/&#8217;/g, "’").replace(/&amp;/g, "&"),
