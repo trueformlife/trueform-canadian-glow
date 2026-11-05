@@ -30,7 +30,7 @@ export function DemoCheckout({ items, qty, change, onBack }: {
   const [done, setDone] = useState<null | { name: string; email: string; total: number }>(null);
   const subtotal = items.reduce((s, i) => s + i.price * (qty[i.id] ?? 0), 0);
   const ship = subtotal >= FREE_SHIP ? 0 : SHIP_FEE;
-  const tax = (subtotal + ship) * TAX[prov][1];
+  const tax = (subtotal + ship) * (TAX[prov]?.[1] ?? 0.05);
   const total = subtotal + ship + tax;
 
   if (done)
