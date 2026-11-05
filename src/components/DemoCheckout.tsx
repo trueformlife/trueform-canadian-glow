@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, CheckCircle2, Lock, Minus, Plus } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Lock, Mail, Minus, Package, Plus, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Item = { id: number; name: string; detail: string; price: number; image: string };
@@ -27,7 +27,7 @@ export function DemoCheckout({ items, qty, change, onBack }: {
   items: Item[]; qty: Record<number, number>; change: (id: number, d: number) => void; onBack: () => void;
 }) {
   const [prov, setProv] = useState("AB");
-  const [done, setDone] = useState<null | { name: string; email: string; total: number }>(null);
+  const [done, setDone] = useState<null | { name: string; email: string; total: number; tax: number; ship: number; number: string; address: string; lines: (Item & { q: number })[] }>(null);
   const subtotal = items.reduce((s, i) => s + i.price * (qty[i.id] ?? 0), 0);
   const ship = subtotal >= FREE_SHIP ? 0 : SHIP_FEE;
   const tax = (subtotal + ship) * (TAX[prov]?.[1] ?? 0.05);
@@ -35,21 +35,70 @@ export function DemoCheckout({ items, qty, change, onBack }: {
 
   if (done)
     return (
-      <div className="mx-auto max-w-lg px-4 py-12 text-center">
-        <CheckCircle2 className="mx-auto h-20 w-20 text-primary" />
-        <h1 className="mt-4 font-display text-4xl font-bold">Thank you{done.name ? `, ${done.name.split(" ")[0]}` : ""}!</h1>
-        <p className="mt-3 text-lg">Your order is in. We sent a receipt to <b>{done.email || "your email"}</b>.</p>
-        <div className="mt-6 rounded-2xl bg-card p-5 text-left text-card-foreground">
-          <p className="font-bold">What happens next</p>
-          <ol className="mt-2 grid gap-2">
-            <li>1. We pack your order within 1–2 business days.</li>
-            <li>2. You get a tracking link by email.</li>
-            <li>3. Questions? Reply to your receipt. Drew or Dorothy will answer.</li>
-          </ol>
-          <p className="mt-4 text-lg">Paid: <b>{money(done.total)} CAD</b></p>
+      <div className="mx-auto max-w-2xl px-4 py-10">
+        <div className="text-center">
+          <CheckCircle2 className="mx-auto h-20 w-20 text-primary" />
+          <h1 className="mt-4 font-display text-4xl font-bold">Thank you{done.name ? `, ${done.name.split(" ")[0]}` : ""}!</h1>
+          <p className="mt-2 text-lg">Your order is in. Order number <b>{done.number}</b>.</p>
+          <p className="mt-1 text-lg">A receipt is on its way to <b>{done.email || "your email"}</b>.</p>
         </div>
-        <p className="mt-4 text-sm text-foreground/70">This is an example. No order was placed.</p>
-        <Button className="mt-6 h-14 w-full text-lg font-bold" onClick={onBack}>Back to shopping</Button>
+
+        <section className="mt-8 rounded-2xl bg-card p-5 text-card-foreground">
+          <h2 className="font-display text-xl font-bold">What happens next</h2>
+          <ol className="mt-4 grid gap-4">
+            {[
+              [Mail, "Receipt sent", "Check your inbox now. It has everything you ordered."],
+              [Package, "Packed by hand", "We pack your order within 1 to 2 business days."],
+              [Truck, "Tracking link", "You get a Canada Post tracking email the day it ships."],
+            ].map(([Icon, t, d], n) => {
+              const I = Icon as typeof Mail;
+              return (
+                <li key={n} className="flex gap-4">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground"><I className="h-6 w-6" /></span>
+                  <div><p className="text-lg font-bold">{n + 1}. {t as string}</p><p>{d as string}</p></div>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+
+        <section className="mt-6 rounded-2xl bg-card p-5 text-card-foreground">
+          <h2 className="font-display text-xl font-bold">Your order</h2>
+          <ul className="mt-3 grid gap-3">
+            {done.lines.map((l) => (
+              <li key={l.id} className="flex items-center gap-3">
+                <img src={l.image} alt="" loading="lazy" className="h-12 w-12 rounded-lg object-contain" />
+                <div className="min-w-0 flex-1"><p className="font-semibold">{l.name}</p><p className="text-sm text-muted-foreground">{l.detail} · Qty {l.q}</p></div>
+                <p className="font-semibold">{money(l.price * l.q)}</p>
+              </li>
+            ))}
+          </ul>
+          <dl className="mt-4 grid gap-1 border-t border-border pt-3">
+            <div className="flex justify-between"><dt>Shipping</dt><dd>{done.ship ? money(done.ship) : "Free"}</dd></div>
+            <div className="flex justify-between"><dt>Tax</dt><dd>{money(done.tax)}</dd></div>
+            <div className="mt-2 flex justify-between text-xl font-bold"><dt>Paid</dt><dd>{money(done.total)} CAD</dd></div>
+          </dl>
+          <div className="mt-4 border-t border-border pt-3">
+            <p className="font-bold">Shipping to</p>
+            <p>{done.name}</p><p>{done.address}</p>
+            <p className="text-sm text-muted-foreground">Canada Post, tracked</p>
+          </div>
+        </section>
+
+        <section className="mt-6 rounded-2xl border-2 border-primary p-5">
+          <h2 className="font-display text-xl font-bold">Questions?</h2>
+          <p className="mt-1 text-lg">Just reply to your receipt email. It goes straight to Drew.</p>
+        </section>
+
+        <section className="mt-6 rounded-2xl bg-secondary p-5 text-secondary-foreground">
+          <h2 className="font-display text-xl font-bold">While you wait</h2>
+          <p className="mt-1">Join other women 40+ sharing tips and wins.</p>
+          <Button asChild className="mt-4 h-14 w-full text-lg font-bold"><a href="https://www.facebook.com/groups/tfagelessenergy" target="_blank" rel="noreferrer">Join the Ageless Energy group</a></Button>
+          <a href="https://smoothie-recipe-book.trueformlife.com/" target="_blank" rel="noreferrer" className="mt-3 flex h-12 items-center justify-center font-semibold underline">Free Smoothie Recipe Book</a>
+        </section>
+
+        <p className="mt-6 text-center text-sm text-foreground/70">This is an example. No order was placed.</p>
+        <Button variant="outline" className="mt-3 h-14 w-full text-lg font-bold" onClick={onBack}>Back to shopping</Button>
       </div>
     );
 
@@ -64,7 +113,13 @@ export function DemoCheckout({ items, qty, change, onBack }: {
         onSubmit={(e) => {
           e.preventDefault();
           const f = new FormData(e.currentTarget);
-          setDone({ name: String(f.get("name") || ""), email: String(f.get("email") || ""), total });
+          const g = (k: string) => String(f.get(k) || "");
+          setDone({
+            name: g("name"), email: g("email"), total, tax, ship,
+            number: `#TFL-${Math.floor(10000 + Math.random() * 90000)}`,
+            address: `${g("street")}, ${g("city")}, ${prov} ${g("postal").toUpperCase()}`,
+            lines: items.filter((i) => (qty[i.id] ?? 0) > 0).map((i) => ({ ...i, q: qty[i.id] ?? 0 })),
+          });
           window.scrollTo(0, 0);
         }}
       >
@@ -77,9 +132,9 @@ export function DemoCheckout({ items, qty, change, onBack }: {
           </section>
           <section className="grid gap-4">
             <h2 className="font-display text-xl font-bold">2. Where should we ship?</h2>
-            <Field label="Street address" autoComplete="street-address" required />
+            <Field label="Street address" name="street" autoComplete="street-address" required />
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="City" autoComplete="address-level2" required />
+              <Field label="City" name="city" autoComplete="address-level2" required />
               <label className="block">
                 <span className="mb-1 block font-semibold">Province</span>
                 <select value={prov} onChange={(e) => setProv(e.target.value)} className="h-14 w-full rounded-xl border-2 border-border bg-card px-4 text-lg text-card-foreground">
@@ -87,7 +142,7 @@ export function DemoCheckout({ items, qty, change, onBack }: {
                 </select>
               </label>
             </div>
-            <Field label="Postal code" autoComplete="postal-code" placeholder="T5J 0N3" required />
+            <Field label="Postal code" name="postal" autoComplete="postal-code" placeholder="T5J 0N3" required />
           </section>
           <section className="grid gap-4">
             <h2 className="font-display text-xl font-bold">3. Payment</h2>
