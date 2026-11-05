@@ -118,7 +118,7 @@ export function DemoCheckout({ items, qty, change, onBack }: {
             name: g("name"), email: g("email"), total, tax, ship,
             number: `#TFL-${Math.floor(10000 + Math.random() * 90000)}`,
             address: `${g("street")}, ${g("city")}, ${prov} ${g("postal").toUpperCase()}`,
-            lines: items.filter((i) => (qty[i.id] ?? 0) > 0).map((i) => ({ ...i, q: qty[i.id] })),
+            lines: items.filter((i) => (qty[i.id] ?? 0) > 0).map((i) => ({ ...i, q: qty[i.id] ?? 0 })),
           });
           window.scrollTo(0, 0);
         }}
