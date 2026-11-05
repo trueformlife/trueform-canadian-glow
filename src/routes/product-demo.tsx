@@ -8,6 +8,9 @@ import magSprayImage from "@/assets/product-images/mag-spray.png.asset.json";
 import magteinImage from "@/assets/product-images/magtein.jpg.asset.json";
 import collagenImage from "@/assets/product-images/collagen.jpg.asset.json";
 import creatineImage from "@/assets/product-images/creatine.png.asset.json";
+import vanillaImage from "@/assets/product-images/vanilla-protein.png.asset.json";
+import turmericImage from "@/assets/product-images/turmeric.png.asset.json";
+import bathFlakesImage from "@/assets/product-images/bath-flakes.png.asset.json";
 
 export const Route = createFileRoute("/product-demo")({
   head: () => ({
@@ -37,13 +40,42 @@ const liquidMag: Item[] = [
   { id: 17817, name: "Liquid Mag", detail: "Pumpkin Spice · 1 bottle", price: 37.94, image: liquidMagImage.url },
   { id: 17818, name: "Liquid Mag", detail: "Pumpkin Spice · 6-pack", price: 189.7, regular: 227.64, image: liquidMagImage.url },
 ];
-const extras: Item[] = [
+type Product = { key: string; name: string; short: string; why: string; image: string; options: Item[]; extras: number[] };
+
+const products: Product[] = [
+  { key: "mag", name: "Liquid Mag", short: "Liquid Mag", why: "Three kinds of magnesium. Deeper sleep, calmer days, fewer cramps.", image: liquidMagImage.url, options: liquidMag, extras: [14521, 14518, 14827] },
+  {
+    key: "protein", name: "Vanilla Protein", short: "Protein", why: "Clean protein. Keeps your strength up and keeps you full.", image: vanillaImage.url,
+    options: [
+      { id: 14817, name: "Vanilla Protein", detail: "500g", price: 40.69, image: vanillaImage.url },
+      { id: 14818, name: "Vanilla Protein", detail: "1000g", price: 60.71, regular: 75.89, image: vanillaImage.url },
+    ],
+    extras: [22687, 22240],
+  },
+  {
+    key: "turmeric", name: "Platinum Turmeric", short: "Turmeric", why: "Comfortable joints so you can keep moving.", image: turmericImage.url,
+    options: [
+      { id: 25869, name: "Platinum Turmeric", detail: "1 bottle", price: 49.95, image: turmericImage.url },
+      { id: 25870, name: "Platinum Turmeric", detail: "3 bottles", price: 139.95, regular: 149.85, image: turmericImage.url },
+    ],
+    extras: [22240, 14815],
+  },
+  {
+    key: "collagen", name: "Collagen", short: "Collagen", why: "Skin, hair, nails and joints. One scoop a day.", image: collagenImage.url,
+    options: [{ id: 22240, name: "Collagen", detail: "1 bag", price: 69.99, image: collagenImage.url }],
+    extras: [25869, 14817],
+  },
+];
+
+const extraItems: Item[] = [
   { id: 14521, name: "Mag Spray", detail: "Rub on sore muscles", price: 32.99, image: magSprayImage.url },
   { id: 14518, name: "Magtein", detail: "Calm mind, better sleep", price: 65.99, image: magteinImage.url },
-  { id: 22240, name: "Collagen", detail: "Skin, hair and joints", price: 69.99, image: collagenImage.url },
+  { id: 14827, name: "Bath Flakes", detail: "1200g · relaxing soak", price: 38.49, image: bathFlakesImage.url },
   { id: 22687, name: "Creatine", detail: "Strength and muscle", price: 49.99, image: creatineImage.url },
 ];
-const all = [...liquidMag, ...extras];
+const all: Item[] = [];
+for (const i of [...products.flatMap((p) => p.options), ...extraItems]) if (!all.some((a) => a.id === i.id)) all.push(i);
+const byId = (id: number) => all.find((i) => i.id === id)!;
 
 function Stepper({ qty, onChange, label }: { qty: number; onChange: (d: number) => void; label: string }) {
   if (qty === 0)
@@ -81,6 +113,8 @@ function Row({ item, qty, onChange }: { item: Item; qty: number; onChange: (d: n
 function ProductDemo() {
   const [qty, setQty] = useState<Record<number, number>>({});
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("mag");
+  const product = products.find((p) => p.key === active)!;
   const change = (id: number, d: number) => setQty((q) => ({ ...q, [id]: Math.max(0, (q[id] ?? 0) + d) }));
 
   const inOrder = all.filter((i) => qty[i.id]);
@@ -130,24 +164,37 @@ function ProductDemo() {
 
       <main className="mx-auto grid max-w-6xl gap-8 px-4 pb-40 pt-6 md:grid-cols-[1fr_360px] md:pb-16">
         <div>
-          <div className="flex items-center gap-4">
-            <img src={liquidMagImage.url} alt="Liquid Mag bottle" className="h-32 w-32 shrink-0 rounded-2xl bg-card object-contain p-2 md:h-44 md:w-44" />
+          <p className="font-semibold">Tap a product. Everything you add stays in your order.</p>
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4" role="tablist">
+            {products.map((p) => {
+              const n = p.options.reduce((s, o) => s + (qty[o.id] ?? 0), 0);
+              return (
+                <button key={p.key} role="tab" aria-selected={p.key === active} onClick={() => setActive(p.key)}
+                  className={`relative flex h-14 items-center justify-center rounded-xl border-2 px-2 font-semibold transition ${p.key === active ? "border-primary bg-primary text-primary-foreground" : "border-line bg-surface"}`}>
+                  {p.short}
+                  {n > 0 && <span className="absolute -right-1 -top-2 grid h-6 min-w-6 place-items-center rounded-full bg-accent px-1 text-xs font-bold text-accent-foreground">{n}</span>}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-6 flex items-center gap-4">
+            <img src={product.image} alt={product.name} className="h-32 w-32 shrink-0 rounded-2xl bg-card object-contain p-2 md:h-44 md:w-44" />
             <div>
               <div className="flex text-accent" aria-label="Rated 5 out of 5">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}</div>
-              <h1 className="mt-1 font-display text-3xl font-bold leading-tight md:text-5xl">Liquid Mag</h1>
-              <p className="mt-1 text-foreground/85">Three kinds of magnesium. Deeper sleep, calmer days, fewer cramps.</p>
+              <h1 className="mt-1 font-display text-3xl font-bold leading-tight md:text-5xl">{product.name}</h1>
+              <p className="mt-1 text-foreground/85">{product.why}</p>
             </div>
           </div>
 
-          <h2 className="mt-6 font-display text-xl font-bold">Pick your flavour and size</h2>
+          <h2 className="mt-6 font-display text-xl font-bold">{product.options.length > 1 ? "Pick your size" : "Add to your order"}</h2>
           <ul className="mt-3 grid gap-3">
-            {liquidMag.map((i) => <Row key={i.id} item={i} qty={qty[i.id] ?? 0} onChange={(d) => change(i.id, d)} />)}
+            {product.options.map((i) => <Row key={i.id} item={i} qty={qty[i.id] ?? 0} onChange={(d) => change(i.id, d)} />)}
           </ul>
 
-          <h2 className="mt-8 font-display text-xl font-bold">Add anything else — right here</h2>
-          <p className="text-foreground/75">No need to leave this page.</p>
+          <h2 className="mt-8 font-display text-xl font-bold">Goes well with</h2>
           <ul className="mt-3 grid gap-3">
-            {extras.map((i) => <Row key={i.id} item={i} qty={qty[i.id] ?? 0} onChange={(d) => change(i.id, d)} />)}
+            {product.extras.map(byId).map((i) => <Row key={i.id} item={i} qty={qty[i.id] ?? 0} onChange={(d) => change(i.id, d)} />)}
           </ul>
 
           <ul className="mt-8 grid gap-3 rounded-2xl bg-surface p-4 text-[16px]">
