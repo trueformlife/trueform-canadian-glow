@@ -84,8 +84,8 @@ function ProductDemo() {
   const change = (id: number, d: number) => setQty((q) => ({ ...q, [id]: Math.max(0, (q[id] ?? 0) + d) }));
 
   const inOrder = all.filter((i) => qty[i.id]);
-  const count = inOrder.reduce((s, i) => s + qty[i.id], 0);
-  const subtotal = inOrder.reduce((s, i) => s + i.price * qty[i.id], 0);
+  const count = inOrder.reduce((s, i) => s + (qty[i.id] ?? 0), 0);
+  const subtotal = inOrder.reduce((s, i) => s + i.price * (qty[i.id] ?? 0), 0);
   const toFree = Math.max(0, FREE_SHIP - subtotal);
   const checkoutHref = inOrder[0] ? `${STORE}/checkout/?add-to-cart=${inOrder[0].id}&quantity=${qty[inOrder[0].id]}` : `${STORE}/shop/`;
 
@@ -105,7 +105,7 @@ function ProductDemo() {
                 <p className="truncate font-semibold">{i.name}</p>
                 <p className="text-sm text-muted-foreground">{i.detail}</p>
               </div>
-              <Stepper qty={qty[i.id]} onChange={(d) => change(i.id, d)} label={`${i.name} ${i.detail}`} />
+              <Stepper qty={qty[i.id] ?? 0} onChange={(d) => change(i.id, d)} label={`${i.name} ${i.detail}`} />
             </li>
           ))}
         </ul>
