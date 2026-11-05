@@ -113,7 +113,7 @@ function Row({ item, qty, onChange }: { item: Item; qty: number; onChange: (d: n
 function ProductDemo() {
   const [qty, setQty] = useState<Record<number, number>>({});
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(products[0].key);
+  const [active, setActive] = useState("mag");
   const product = products.find((p) => p.key === active)!;
   const change = (id: number, d: number) => setQty((q) => ({ ...q, [id]: Math.max(0, (q[id] ?? 0) + d) }));
 
