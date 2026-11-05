@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ChevronUp, Leaf, Minus, Plus, ShieldCheck, Star, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DemoCheckout } from "@/components/DemoCheckout";
 import logoImage from "@/assets/tfl-logo.png";
 import liquidMagImage from "@/assets/product-images/liquid-mag.png.asset.json";
 import magSprayImage from "@/assets/product-images/mag-spray.png.asset.json";
@@ -27,7 +28,6 @@ export const Route = createFileRoute("/product-demo")({
   component: ProductDemo,
 });
 
-const STORE = "https://trueformlife.com";
 const FREE_SHIP = 200;
 const money = (n: number) => `$${n.toFixed(2)}`;
 
@@ -114,6 +114,8 @@ function ProductDemo() {
   const [qty, setQty] = useState<Record<number, number>>({});
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("mag");
+  const [step, setStep] = useState<"shop" | "checkout">("shop");
+  const goCheckout = () => { setOpen(false); setStep("checkout"); window.scrollTo(0, 0); };
   const product = products.find((p) => p.key === active)!;
   const change = (id: number, d: number) => setQty((q) => ({ ...q, [id]: Math.max(0, (q[id] ?? 0) + d) }));
 
@@ -121,7 +123,6 @@ function ProductDemo() {
   const count = inOrder.reduce((s, i) => s + (qty[i.id] ?? 0), 0);
   const subtotal = inOrder.reduce((s, i) => s + i.price * (qty[i.id] ?? 0), 0);
   const toFree = Math.max(0, FREE_SHIP - subtotal);
-  const checkoutHref = inOrder[0] ? `${STORE}/checkout/?add-to-cart=${inOrder[0].id}&quantity=${qty[inOrder[0].id]}` : `${STORE}/shop/`;
 
   const Summary = (
     <div>
@@ -146,7 +147,7 @@ function ProductDemo() {
       )}
       <div className="mt-4 flex justify-between text-lg"><span>Total</span><span className="font-bold">{money(subtotal)} CAD</span></div>
       <p className="text-sm text-muted-foreground">Shipping and tax shown at checkout.</p>
-      <Button asChild className="mt-3 h-14 w-full text-lg font-bold" disabled={!count}><a href={checkoutHref}>Checkout securely</a></Button>
+      <Button className="mt-3 h-14 w-full text-lg font-bold" disabled={!count} onClick={goCheckout}>Checkout securely</Button>
     </div>
   );
 
@@ -162,6 +163,7 @@ function ProductDemo() {
         </div>
       </header>
 
+      {step === "checkout" ? <DemoCheckout items={inOrder} qty={qty} change={change} onBack={() => setStep("shop")} /> : <>
       <main className="mx-auto grid max-w-6xl gap-8 px-4 pb-40 pt-6 md:grid-cols-[1fr_360px] md:pb-16">
         <div>
           <p className="font-semibold">Tap a product. Everything you add stays in your order.</p>
@@ -224,9 +226,10 @@ function ProductDemo() {
             </span>
             <ChevronUp className={`transition ${open ? "rotate-180" : ""}`} />
           </button>
-          <Button asChild className="h-14 px-5 text-lg font-bold" disabled={!count}><a href={checkoutHref}>Checkout</a></Button>
+          <Button className="h-14 px-5 text-lg font-bold" disabled={!count} onClick={goCheckout}>Checkout</Button>
         </div>
       </div>
+      </>}
     </div>
   );
 }
