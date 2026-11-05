@@ -264,7 +264,7 @@ function ProductDemo() {
               <li key={a.name} className="flex items-center gap-3 rounded-xl bg-muted p-3">
                 <img src={a.image} alt="" className="h-14 w-14 object-contain" />
                 <div className="flex-1"><p className="font-semibold">{a.name}</p><p className="text-sm text-muted-foreground">{a.detail} · {money(a.price)}</p></div>
-                <Button asChild variant="outline" className="h-11"><a href={a.href}>View</a></Button>
+                <Button asChild variant="secondary" className="h-11"><a href={a.href}>View</a></Button>
               </li>
             ))}
           </ul>
