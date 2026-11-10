@@ -137,7 +137,6 @@ function ProductCard({ product: base, compact = false, regularPrice }: { product
 
 function SearchDropdown({ ids, query, onClose }: { ids: string[]; query: string; onClose: () => void }) {
   const livePrices = useContext(LivePrices);
-  const storeSearch = `${STORE_BASE_URL}/?s=${encodeURIComponent(query.trim())}&post_type=product`;
   return (
     <div className="absolute inset-x-0 top-full z-40 px-3 pt-2 sm:px-6">
       <div className="mx-auto max-h-[70vh] max-w-3xl overflow-y-auto rounded-lg border border-line bg-card p-2 text-card-foreground shadow-2xl">
@@ -166,9 +165,6 @@ function SearchDropdown({ ids, query, onClose }: { ids: string[]; query: string;
         ) : (
           <p className="px-3 py-4 text-base text-muted-foreground">No products found for “{query}”.</p>
         )}
-        <a href={storeSearch} className="mt-1 flex min-h-12 items-center justify-center gap-2 rounded-md border-t border-line px-3 text-base font-bold text-primary">
-          Search the full store for “{query.trim()}” <ArrowRight className="h-4 w-4" />
-        </a>
       </div>
     </div>
   );
